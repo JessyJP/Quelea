@@ -377,12 +377,26 @@ public class MidiInterfaceConnector
             Transmitter defautlTransmitter = MidiSystem.getTransmitter();
             LOGGER.log(Level.INFO, "Default transmitter ["+defautlTransmitter.toString()+"]");
             defautlTransmitter.setReceiver( new QueleaInputMidiReceiver(QueleaMidiDev_IN.getDeviceInfo().toString()) );
+    public void closeInputDevice(){
+        // If the device is located
+        if (QueleaMidiDev_IN != null && QueleaMidiDev_IN.isOpen())
+        {
+            QueleaMidiDev_IN.close();
+            LOGGER.log(Level.INFO, "INPUT MIDI device successfully is now closed.");
+        }
+    }
+
+    public void closeOutputDevice(){
+        // If the device is located
+        if (QueleaMidiDev_OUT != null && QueleaMidiDev_OUT.isOpen())
+        {
+            QueleaMidiDev_OUT.close();
+            LOGGER.log(Level.INFO, "OUTPUT MIDI device successfully is now closed.");
         }
     }
 
     public void testTone() throws InvalidMidiDataException, MidiUnavailableException
     {
-
         //------------------------- FOR DEBUG
         ShortMessage myMsg = new ShortMessage();
         // Start playing the note Middle C (60),
@@ -398,14 +412,11 @@ public class MidiInterfaceConnector
     }
 
     @Override
-    public void finalize() throws Throwable {
+    protected void finalize() throws Throwable {
         //super.finalize();
         // If the device is located
-        if (!(QueleaMidiDev_IN.isOpen()))
-        {
-            QueleaMidiDev_IN.close();
-            LOGGER.log(Level.INFO, "MIDI device successfully is now closed.");
-        }
+        closeInputDevice();
+        closeOutputDevice();
     }
 
 

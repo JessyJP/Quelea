@@ -41,6 +41,7 @@ import org.quelea.services.utils.QueleaProperties;
 public class PreviewPanel extends LivePreviewPanel {
 
     private final Button liveButton;
+	public boolean previewPanelBypassON;
 
     /**
      * Create a new preview lyrics panel.
@@ -58,6 +59,7 @@ public class PreviewPanel extends LivePreviewPanel {
                         : "file:icons/golivearrow.png"));
         goLiveIV.setFitHeight(16);
         goLiveIV.setFitWidth(16);
+		previewPanelBypassON = QueleaProperties.get().getPreviewPanelBypass();
         liveButton = new Button(LabelGrabber.INSTANCE.getLabel("go.live.text"), goLiveIV);
         liveButton.setTooltip(new Tooltip(LabelGrabber.INSTANCE.getLabel("go.live.text") + " ("
                 + LabelGrabber.INSTANCE.getLabel("space.key") + ")"));
@@ -79,6 +81,9 @@ public class PreviewPanel extends LivePreviewPanel {
             if (t.getCharacter().equals(" ")) {
                 goLive();
             }
+			if (previewPanelBypassON) {
+				goLive();
+			}
         });
         setOnKeyPressed(t -> {
             if (t.getCode() == KeyCode.RIGHT) {
@@ -86,6 +91,9 @@ public class PreviewPanel extends LivePreviewPanel {
             } else if (t.getCode() == KeyCode.LEFT) {
                 QueleaApp.get().getMainWindow().getMainPanel().getSchedulePanel().requestFocus();
             }
+			if (previewPanelBypassON) {
+				goLive();
+			}
         });
     }
 

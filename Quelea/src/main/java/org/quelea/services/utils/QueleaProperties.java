@@ -2536,4 +2536,12 @@ public final class QueleaProperties extends SortedProperties {
     public void setUseDarkTheme(boolean useDarkTheme) {
         setProperty(darkThemeKey, String.valueOf(useDarkTheme));
     }
+
+    public boolean getPreviewPanelBypass() {
+        return Boolean.parseBoolean(getProperty(previewPanelBypass, "false"));
+    }
+
+    public void setPreviewPanelBypass(boolean previewPanelBypassON) {
+        setProperty(previewPanelBypass, String.valueOf(previewPanelBypassON));
+    }
 }

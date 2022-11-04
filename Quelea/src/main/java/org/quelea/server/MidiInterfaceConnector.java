@@ -395,6 +395,14 @@ public class MidiInterfaceConnector
         midiOutputReady = false;
     }
 
+    public boolean getInputReadyState() {
+        return midiInputReady;
+    }
+
+    public boolean getOutputReadyState() {
+        return midiOutputReady;
+    }
+
     @Override
     protected void finalize() throws Throwable {
         //super.finalize();

@@ -182,7 +182,7 @@ public class MidiInterfaceConnector
         LOGGER.log(Level.INFO, "Setup midi connection with [{0}]",defaultMidiDeviceInterface);
         updateMidiEventPropertyList();
         this.setupMidiInputConnection(defaultMidiDeviceInterface);
-        this.setupMidiOutputConnection(defaultMidiDeviceInterface);
+        //this.setupMidiOutputConnection(defaultMidiDeviceInterface);
     }
 
     public void updateMidiEventPropertyList() {
@@ -286,9 +286,9 @@ public class MidiInterfaceConnector
             }
 
 
-            //Get list of transmitters for this device
-            Transmitter externalTransmitter = QueleaMidiDev_IN.getTransmitter();;
-            LOGGER.log(Level.INFO, "Default transmitter ["+ externalTransmitter.toString()+"]");
+            //Get a transmitters for this device
+            Transmitter externalTransmitter = QueleaMidiDev_IN.getTransmitter();
+            LOGGER.log(Level.INFO, "External transmitter ["+ externalTransmitter.toString()+"]");
             externalTransmitter.setReceiver( new QueleaInputMidiReceiver(QueleaMidiDev_IN.getDeviceInfo().toString()) );
         }
         midiInputReady = true;
@@ -364,10 +364,11 @@ public class MidiInterfaceConnector
             }
 
 
-            //Get list of transmitters for this device
-            Transmitter externalTransmitter = QueleaMidiDev_IN.getTransmitter();;
-            LOGGER.log(Level.INFO, "Default transmitter ["+ externalTransmitter.toString()+"]");
-            externalTransmitter.setReceiver( new QueleaInputMidiReceiver(QueleaMidiDev_IN.getDeviceInfo().toString()) );
+            // !!! Here is a bit different. DO WE WANT TO CONNECT TO ONE RECIEVER OR MULTIPLE ONES?
+            //Get a receiver for this device
+            Receiver externalReceivers = QueleaMidiDev_OUT.getReceiver();;
+            LOGGER.log(Level.INFO, "External transmitter ["+ externalReceivers.toString()+"]");
+
         }
         midiOutputReady = true;
     }
@@ -403,6 +404,8 @@ public class MidiInterfaceConnector
     }
 
 
+    // This class is a bit redundant at the moment but it could help set Quelea as an output device.
+    // Similar thing could be done for the input.
     public class QueleaOutputMidiTransmitter implements Transmitter {
 
         @Override

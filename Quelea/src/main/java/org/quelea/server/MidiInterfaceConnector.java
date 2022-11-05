@@ -182,7 +182,7 @@ public class MidiInterfaceConnector
         LOGGER.log(Level.INFO, "Setup midi connection with [{0}]",defaultMidiDeviceInterface);
         updateMidiEventPropertyList();
         this.setupMidiInputConnection(defaultMidiDeviceInterface);
-        //this.setupMidiOutputConnection(defaultMidiDeviceInterface);
+        this.setupMidiOutputConnection(defaultMidiDeviceInterface);
     }
 
     public void updateMidiEventPropertyList() {

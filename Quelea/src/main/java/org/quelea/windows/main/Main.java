@@ -170,7 +170,7 @@ public final class Main extends Application {
                         LOGGER.log(Level.INFO, "Starting midi control interface with [{0}]", QueleaProperties.get().getMidiDeviceInterface());
                         try {
                             MidiInterfaceConnector midiController = new MidiInterfaceConnector(QueleaProperties.get().getMidiDeviceInterface());
-                            //QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the pannel
+                            QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the pannel
                         } catch (Exception ex) {
                             LOGGER.log(Level.INFO, "Couldn't create midi control interface", ex);
                         }

@@ -1205,7 +1205,7 @@ public class RemoteControlServer {
     }
 
     private boolean isDeferred(String ip,String call){
-        return true;
+        return false;
     }
 
 }

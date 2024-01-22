@@ -29,3 +29,20 @@ Quelea/private/*
 
 Thumbs.db
 gs.msi
+.idea/vcs.xml
+.idea/Quelea.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/jarRepositories.xml
+.idea/gradle.xml
+.idea/compiler.xml
+Quelea/macjre.zip
+Quelea/winjre64.zip
+MIDI_setup_python_app/.idea/vcs.xml
+MIDI_setup_python_app/.idea/modules.xml
+MIDI_setup_python_app/.idea/misc.xml
+MIDI_setup_python_app/.idea/MIDI_setup_python_app.iml
+MIDI_setup_python_app/.idea/inspectionProfiles/Project_Default.xml
+MIDI_setup_python_app/.idea/inspectionProfiles/profiles_settings.xml
+MIDI_setup_python_app/.idea/.name
+MIDI_setup_python_app/.idea/workspace.xml

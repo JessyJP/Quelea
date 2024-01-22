@@ -36,6 +36,7 @@ import java.util.logging.Level;
 
 import static org.quelea.services.utils.QueleaPropertyKeys.*;
 
+import static org.quelea.services.utils.QueleaPropertyKeys.*; // Why are we importing one by one ??!
 /**
  * Manages the properties specific to Quelea.
  * <p>

@@ -40,7 +40,7 @@ javafx {
 }
 
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '9.0'
 }
 
 ext {
@@ -81,16 +81,37 @@ compileJava.finalizedBy(dependencyUpdates)
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 ext.mainClass = 'org.quelea.windows.main.MainStub'
 
-task createQueleaExe64(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) { //Launch4j
+
+application {
+    mainClassName = 'org.quelea.windows.main.MainStub'
+
+    applicationDefaultJvmArgs = [
+            '--add-opens', 'java.base/java.nio=ALL-UNNAMED',
+            '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+            // Add more --add-opens as needed
+    ]
+}
+
+task createQueleaExe64(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
     mainClassName = 'org.quelea.windows.main.MainStub'
     mutexName = "queleamutex"
     supportUrl = "https://quelea.discourse.group/"
     icon = "../../icons/logo.ico"
     copyright = "GPLv3"
     bundledJrePath = "winjre64"
-    jvmOptions = ["-Dfile.encoding=UTF-8","-Dprism.dirtyopts=false","--add-opens java.base/java.nio=ALL-UNNAMED","-Dglass.accessible.force=false","--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED","--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED","--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED","--add-opens java.base/java.lang=ALL-UNNAMED","--add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED"]
+    jvmOptions = [
+            '-Dfile.encoding=UTF-8',
+            '-Dprism.dirtyopts=false',
+            '--add-opens=java.base/java.nio=ALL-UNNAMED',
+            '--add-opens=java.base/java.lang=ALL-UNNAMED',
+            '--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED',
+            '--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED',
+            '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED',
+            '--add-opens=javafx.controls/javafx.scene.control=ALL-UNNAMED'
+    ]
     outfile = "Quelea64.exe"
 }
+
 
 task downloadGStreamer {
     def f = new File('gs.msi')
@@ -232,7 +253,7 @@ dependencies {
     implementation 'org.freedesktop.gstreamer:gst1-java-fx:0.9.0'
 
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.8'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.9'
     implementation group: 'com.healthmarketscience.jackcess', name: 'jackcess', version: '4.0.1'
     implementation group: 'org.apache.lucene', name: 'lucene-core', version: '8.9.0'
     implementation group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.9.0'

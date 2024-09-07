@@ -26,6 +26,7 @@ import org.quelea.server.AutoDetectServer;
 import org.quelea.server.MidiInterfaceConnector;
 import org.quelea.server.MobileLyricsServer;
 import org.quelea.server.RemoteControlServer;
+import org.quelea.server.mDNS_Service;  // Add import for mDNS service
 import org.quelea.services.languages.LabelGrabber;
 
 /**
@@ -43,6 +44,7 @@ public class QueleaApp {
     private RemoteControlServer rcs;
     private MidiInterfaceConnector mcm = null;//Midi Control Module
     private AutoDetectServer ads;
+    private mDNS_Service mdnsService;  // Add mDNS service instance
     private List<Runnable> runnables = new ArrayList<>();
     private volatile boolean loaded;
 
@@ -188,6 +190,24 @@ public class QueleaApp {
 
     public void setAutoDetectServer(AutoDetectServer ads) {
         this.ads = ads;
+    }
+
+    /**
+     * Get the mDNS service instance in use. Null if none is in use.
+     *
+     * @return the mDNS service.
+     */
+    public mDNS_Service getMdnsService() {
+        return mdnsService;
+    }
+
+    /**
+     * Set the mDNS service currently in use.
+     *
+     * @param mdnsService the mDNS service instance.
+     */
+    public void setMdnsService(mDNS_Service mdnsService) {
+        this.mdnsService = mdnsService;
     }
 
     public MidiInterfaceConnector getMidiInterfaceConnector() {

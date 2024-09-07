@@ -46,7 +46,7 @@ import static org.quelea.services.utils.QueleaPropertyKeys.*;
  */
 public class OptionsMIDIPanel {
     private BooleanProperty enableMidiProperty;
-    private SimpleStringProperty selectedDeviceProperty;
+    private SimpleStringProperty selectedInputDeviceProperty;
     private SimpleIntegerProperty globalMidiChannelProperty;
     private HashMap<Field, ObservableValue> bindings;
 
@@ -78,7 +78,7 @@ public class OptionsMIDIPanel {
                 MidiUtils.getMidiOutputDeviceList().stream().map(MidiDevice.Info::getName).collect(Collectors.toList())
         );
 
-        selectedDeviceProperty = new SimpleStringProperty(midiDevices.isEmpty() ? null : midiDevices.get(0));
+        selectedInputDeviceProperty = new SimpleStringProperty(midiDevices.isEmpty() ? null : midiDevices.get(0));
     }
 
     public Category getMidiTab() {
@@ -90,7 +90,7 @@ public class OptionsMIDIPanel {
         deviceDropdown.getItems().addAll(
                 MidiUtils.getMidiOutputDeviceList().stream().map(MidiDevice.Info::getName).collect(Collectors.toList())
         );
-        deviceDropdown.valueProperty().bindBidirectional(selectedDeviceProperty);
+        deviceDropdown.valueProperty().bindBidirectional(selectedInputDeviceProperty);
         // Create ComboBox for MIDI channels
         ObservableList<Integer> midiChannels = FXCollections.observableArrayList();
         for (int i = 1; i <= 16; i++) {
@@ -111,7 +111,7 @@ public class OptionsMIDIPanel {
         Group[] allGroups = new Group[midiControlGroups.size() + 1];
         allGroups[0] = Group.of(LabelGrabber.INSTANCE.getLabel("midi.options.group"),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.enable.label"), enableMidiProperty).customKey(midiEnabled),
-                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.device.label"), selectedDeviceProperty).customKey(midiInterface),
+                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.device.label"), selectedInputDeviceProperty).customKey(midiInterfaceIn),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.channel.label"), IntegerProperty.integerProperty(channelDropdown.valueProperty())).customKey(midiGlobalChannel)
         );
         System.arraycopy(midiControlGroups.toArray(), 0, allGroups, 1, midiControlGroups.size());

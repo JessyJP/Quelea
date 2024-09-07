@@ -145,7 +145,7 @@ public class QueleaPropertyKeys {
 
 	// ----------------- MIDI section begin -----------------
     public static final String midiEnabled = "midi.enabled";// midi
-    public static final String midiInterface = "midi.interface";//midi
+    public static final String midiInterfaceIn = "midi.interface.in";//midi
     public static final String midiInterfaceOut = "midi.interface.out";//midi
     public static final String midiGlobalChannel = "midi.globalChannel";//midi
     public static final String midiAction_Black				=	"midi.Action.Black";  			//  Screen	 	 BlackToggleHandler()

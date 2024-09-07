@@ -2576,9 +2576,9 @@ public final class QueleaProperties extends SortedProperties {
         write();
     }
 
-    public String getMidiDeviceInterface() {  return getProperty(midiInterface, "Reaper-Quelea");  }
+    public String getMidiDeviceInterface() {  return getProperty(midiInterfaceIn, "Reaper-Quelea");  }
     public void setMidiDeviceInterface(String midiInterfaceName){
-        setProperty(midiInterface, midiInterfaceName);
+        setProperty(midiInterfaceIn, midiInterfaceName);
         write();
     }
 

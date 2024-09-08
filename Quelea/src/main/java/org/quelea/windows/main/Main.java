@@ -1,7 +1,6 @@
 /*
  * This file is part of Quelea, free projection software for churches.
  *
- *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
@@ -28,6 +27,7 @@ import org.quelea.data.bible.BibleManager;
 import org.quelea.data.db.SongManager;
 import org.quelea.data.powerpoint.OOUtils;
 import org.quelea.server.AutoDetectServer;
+import org.quelea.server.mDNS_Service;  // Import mDNS service
 import org.quelea.server.MobileLyricsServer;
 import org.quelea.server.RemoteControlServer;
 import org.quelea.server.MidiInterfaceConnector;
@@ -105,10 +105,9 @@ public final class Main extends Application {
             try {
                 boolean gok;
 
-                if(QueleaProperties.get().getDisableVideo()) {
+                if (QueleaProperties.get().getDisableVideo()) {
                     gok = false;
-                }
-                else {
+                } else {
                     GStreamerUtils.configurePaths();
                     try {
                         Gst.init(Version.BASELINE, "Quelea");
@@ -161,19 +160,19 @@ public final class Main extends Application {
                     LOGGER.log(Level.INFO, "Remote control disabled");
                 }
 
-				// -MIDI CONTROL -----------------------------------------------
-				if (QueleaProperties.get().getUseMidiControl()) {
-					LOGGER.log(Level.INFO, "Starting midi control interface with [{0}]", QueleaProperties.get().getMidiDeviceInterface());
-					try {
-						MidiInterfaceConnector midiController = new MidiInterfaceConnector(QueleaProperties.get().getMidiDeviceInterface());
-						//QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the panel
-					} catch (Exception ex) {
-						LOGGER.log(Level.INFO, "Couldn't create midi control interface", ex);
-					}
-				} else {
-					LOGGER.log(Level.INFO, "Midi control disabled");
-				}
-				//------------------------------------------------------------
+                // -MIDI CONTROL -----------------------------------------------
+                if (QueleaProperties.get().getUseMidiControl()) {
+                    LOGGER.log(Level.INFO, "Starting midi control interface with [{0}]", QueleaProperties.get().getMidiDeviceInterface());
+                    try {
+                        MidiInterfaceConnector midiController = new MidiInterfaceConnector(QueleaProperties.get().getMidiDeviceInterface());
+                        //QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the panel
+                    } catch (Exception ex) {
+                        LOGGER.log(Level.INFO, "Couldn't create midi control interface", ex);
+                    }
+                } else {
+                    LOGGER.log(Level.INFO, "Midi control disabled");
+                }
+                //------------------------------------------------------------
 
                 if (QueleaProperties.get().getUseMobLyrics() || QueleaProperties.get().getUseRemoteControl()) {
                     LOGGER.log(Level.INFO, "Starting auto-detection server on {0}", QueleaProperties.get().getAutoDetectPort());
@@ -187,6 +186,22 @@ public final class Main extends Application {
                 } else {
                     LOGGER.log(Level.INFO, "Auto-detect servers disabled");
                 }
+
+                // - mDNS -----------------------------------------------
+                // Start the mDNS service to advertise the Quelea services (Mobile Lyrics and Remote Control)
+                LOGGER.log(Level.INFO, "Starting mDNS service for Quelea Server");
+                mDNS_Service mdnsService = new mDNS_Service();
+                QueleaApp.get().setMdnsService(mdnsService);  // Store mDNS service in QueleaApp
+                mdnsService.startAll();  // Register the mDNS services for both Mobile Lyrics and Remote Control
+
+                // Add a shutdown hook to stop mDNS services when the app is closed
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    if (mdnsService != null) {
+                        mdnsService.stopAll();  // Unregister all mDNS services
+                    }
+                }));
+                //------------------------------------------------------------
+
 
                 if (QueleaProperties.get().getWebProxyHost() != null && QueleaProperties.get().getWebProxyPort() != null && QueleaProperties.get().getWebProxyUser() != null && QueleaProperties.get().getWebProxyPassword() != null) {
                     System.setProperty("http.proxyHost", QueleaProperties.get().getWebProxyHost());

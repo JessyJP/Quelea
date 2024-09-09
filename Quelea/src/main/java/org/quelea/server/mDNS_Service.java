@@ -152,5 +152,130 @@ public class mDNS_Service {
         return null;
     }
 
+    // ----- Test methods ------
+
+    /**
+     * Perform a self-test to verify that the mDNS service has been properly registered and is discoverable.
+     *
+     * @param serviceName The name of the service.
+     * @param port        The port the service runs on.
+     */
+    private void selfTest(String serviceName, int port) {
+        LOGGER.log(Level.INFO, "Starting self-test for service: {0}", serviceName);
+
+        try {
+            Thread.sleep(1000); // Sleep for 1 second to allow registration
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.WARNING, "Self-test delay interrupted", e);
+        }
+
+        ServiceInfo serviceInfo = registeredServices.get(serviceName);
+        if (serviceInfo != null) {
+            String testUrl = getServiceURL(serviceName);
+            LOGGER.log(Level.INFO, "Self-test for service {0}, testing URL: {1}", new Object[]{serviceName, testUrl});
+
+            boolean serviceAvailable = resolveService(serviceName, port);
+
+            if (serviceAvailable) {
+                LOGGER.log(Level.INFO, "Self-test passed: mDNS service {0} is available at {1}",
+                        new Object[]{serviceName, testUrl});
+            } else {
+                LOGGER.log(Level.SEVERE, "Self-test failed: mDNS service {0} is NOT available at {1}",
+                        new Object[]{serviceName, testUrl});
+            }
+        } else {
+            LOGGER.log(Level.SEVERE, "Self-test failed: mDNS service not found for {0}", serviceName);
+        }
+    }
+
+    /**
+     * Simulate resolving the service by checking if both the URL and IP respond.
+     *
+     * @param serviceName The service name to resolve.
+     * @param port        The port on which the service runs.
+     * @return True if the service is discoverable and accessible, false otherwise.
+     */
+    private boolean resolveService(String serviceName, int port) {
+        boolean ipSuccess = false;
+        boolean localDomainSuccess = false;
+
+        String ipAddress = getIP();
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "Failed to retrieve a valid IP address for the service.");
+            return false;
+        }
+
+        // Test IP-based URL
+        String ipBasedUrl = "http://" + ipAddress + ":" + port;
+        LOGGER.log(Level.INFO, "Testing connection to service at IP-based URL: {0}", ipBasedUrl);
+        ipSuccess = testConnection(ipBasedUrl);
+
+        if (ipSuccess) {
+            LOGGER.log(Level.INFO, "Successfully connected to IP-based URL: {0}", ipBasedUrl);
+        } else {
+            LOGGER.log(Level.WARNING, "Failed to connect to IP-based URL: {0}", ipBasedUrl);
+        }
+
+        // Test .local domain URL
+        String localDomainUrl = "http://" + serviceName + ".local:" + port;
+        LOGGER.log(Level.INFO, "Testing connection to service at .local URL: {0}", localDomainUrl);
+        localDomainSuccess = testConnection(localDomainUrl);
+
+        if (localDomainSuccess) {
+            LOGGER.log(Level.INFO, "Successfully connected to .local URL: {0}", localDomainUrl);
+        } else {
+            LOGGER.log(Level.WARNING, "Failed to connect to .local URL: {0}", localDomainUrl);
+        }
+
+        // Test port directly
+        boolean portAccessible = testPort(ipAddress, port);
+        if (portAccessible) {
+            LOGGER.log(Level.INFO, "Port {0} is accessible on IP {1}", new Object[]{port, ipAddress});
+        } else {
+            LOGGER.log(Level.WARNING, "Port {0} is NOT accessible on IP {1}", new Object[]{port, ipAddress});
+        }
+
+        // Return true if either URL test or port test is successful
+        return (ipSuccess || localDomainSuccess) && portAccessible;
+    }
+
+    /**
+     * Test the connection to a given URL.
+     *
+     * @param urlString The URL to test.
+     * @return True if the connection is successful, false otherwise.
+     */
+    private boolean testConnection(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);  // 5 seconds timeout
+
+            int responseCode = connection.getResponseCode();
+            return (responseCode >= 200 && responseCode < 400);  // Consider success for 2xx and 3xx response codes
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Failed to connect to URL: " + urlString, e);
+            return false;
+        }
+    }
+
+    /**
+     * Test if the specified port is accessible on the given IP address.
+     *
+     * @param ipAddress The IP address to test.
+     * @param port      The port to test.
+     * @return True if the port is accessible, false otherwise.
+     */
+    private boolean testPort(String ipAddress, int port) {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(ipAddress, port), 5000);  // 5 seconds timeout
+            return true;  // Port is accessible
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to connect to port {0} on IP {1}", new Object[]{port, ipAddress});
+            return false;
+        }
+    }
+
 
 }

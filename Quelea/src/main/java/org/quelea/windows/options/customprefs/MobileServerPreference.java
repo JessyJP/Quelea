@@ -119,11 +119,19 @@ public class MobileServerPreference extends SimpleControl<StringField, StackPane
         Text mobUrlLabel = new Text(url);
         if (Desktop.isDesktopSupported() && url.startsWith("http")) {
             mobUrlLabel.setCursor(Cursor.HAND);
-            mobUrlLabel.setFill(Color.BLUE);
+            mobUrlLabel.setFill(Color.LIGHTGREEN);
             mobUrlLabel.setStyle("-fx-underline: true;");
             mobUrlLabel.setOnMouseClicked((MouseEvent t) -> {
                 DesktopApi.browse(url);
             });
+        }
+
+        Text mdnsText = null;
+        if (isLyrics){
+            mdnsText = createClickableMdnsLabel("mobile_lyrics");
+        }
+        else{
+            mdnsText = createClickableMdnsLabel("remote_control");
         }
 
         HBox hBox = new HBox();
@@ -132,6 +140,7 @@ public class MobileServerPreference extends SimpleControl<StringField, StackPane
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.setSpacing(10);
         vBox.getChildren().addAll(editableField, mobUrlLabel);
+        vBox.getChildren().add(mdnsText);
         hBox.getChildren().addAll(vBox, qrStack);
         HBox.setHgrow(vBox, Priority.ALWAYS);
         hBox.setAlignment(Pos.CENTER_LEFT);
@@ -139,6 +148,22 @@ public class MobileServerPreference extends SimpleControl<StringField, StackPane
         node.getChildren().addAll(hBox);
 
         node.setAlignment(Pos.CENTER_LEFT);
+    }
+
+    private Text createClickableMdnsLabel(String serviceName) {
+        // Get the mDNS URL for the given service name
+        String mdnsUrl = QueleaApp.get().getMdnsService().getServiceURL(serviceName);
+
+        // Create the clickable text component
+        Text mdnsLabel = new Text(mdnsUrl);
+        mdnsLabel.setCursor(Cursor.HAND);
+        mdnsLabel.setFill(Color.LIGHTGREEN); // Set link color
+        mdnsLabel.setStyle("-fx-underline: true;"); // Add underline to signify it's a link
+
+        // Add click event to open the URL in the browser
+        mdnsLabel.setOnMouseClicked(event -> DesktopApi.browse(mdnsUrl));
+
+        return mdnsLabel;
     }
 
     private Image getQRImage() {
@@ -205,7 +230,7 @@ public class MobileServerPreference extends SimpleControl<StringField, StackPane
         return urlRCCache;
     }
 
-    private static String getIP() {
+    public static String getIP() {
         String v6address = null;
         Enumeration<NetworkInterface> interfaces = null;
         try {

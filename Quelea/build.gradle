@@ -292,6 +292,9 @@ dependencies {
 
     implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.32'
 
+
+    implementation 'org.jmdns:jmdns:3.5.7' // For auto discovery
+
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"

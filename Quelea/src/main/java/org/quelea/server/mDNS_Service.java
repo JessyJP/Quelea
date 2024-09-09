@@ -5,8 +5,10 @@ import org.quelea.services.utils.QueleaProperties;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,14 +33,22 @@ public class mDNS_Service {
      * @param concurrent  If true, starts the service in a separate thread and performs self-test.
      */
     public void startService(String serviceName, int port, boolean concurrent) {
+        LOGGER.log(Level.INFO, "Attempting to start mDNS service: {0} on port {1} (concurrent: {2})",
+                new Object[]{serviceName, port, concurrent});
+
         if (concurrent) {
             Thread serviceThread = new Thread(() -> {
-                startServiceInternal(serviceName, port);
-                selfTest(serviceName);
+                try {
+                    startServiceInternal(serviceName, port);
+                    selfTest(serviceName, port);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "Error starting mDNS service: " + serviceName, e);
+                }
             });
             serviceThread.start();
         } else {
             startServiceInternal(serviceName, port);
+            selfTest(serviceName, port);
         }
     }
 
@@ -47,10 +57,18 @@ public class mDNS_Service {
      */
     private void startServiceInternal(String serviceName, int port) {
         try {
+            LOGGER.log(Level.INFO, "Starting internal service for {0} on port {1}", new Object[]{serviceName, port});
+
             if (jmdns == null) {
                 String ipAddress = getIP();
-                if (ipAddress == null){ return;}
+                LOGGER.log(Level.INFO, "Obtained IP Address: {0}", ipAddress);
+
+                if (ipAddress == null) {
+                    LOGGER.log(Level.SEVERE, "No valid IP address found for mDNS service.");
+                    return;
+                }
                 jmdns = JmDNS.create(ipAddress);  // Ensure it uses the correct IPv4 address
+                LOGGER.log(Level.INFO, "JmDNS instance created using IP: {0}", ipAddress);
             }
 
             // Register the mDNS service with the correct service type (_http._tcp) and domain (.local)
@@ -66,56 +84,10 @@ public class mDNS_Service {
             jmdns.registerService(serviceInfo);
             registeredServices.put(serviceName, serviceInfo);
 
-            LOGGER.log(Level.INFO, "Registered mDNS service: {0} on port {1}", new Object[]{serviceName, port});
+            LOGGER.log(Level.INFO, "Successfully registered mDNS service: {0} on port {1}", new Object[]{serviceName, port});
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to start mDNS service for " + serviceName, e);
         }
-    }
-
-
-    /**
-     * Perform a self-test to verify that the mDNS service has been properly registered and is discoverable.
-     *
-     * @param serviceName The name of the service.
-     */
-    private void selfTest(String serviceName) {
-        try {
-            Thread.sleep(1000); // Sleep for 1 second to allow registration
-        } catch (InterruptedException e) {
-            LOGGER.log(Level.WARNING, "Self-test delay interrupted", e);
-        }
-
-        ServiceInfo serviceInfo = registeredServices.get(serviceName);
-        if (serviceInfo != null) {
-            String testUrl = getServiceURL(serviceName);
-            boolean serviceAvailable = resolveService(testUrl);
-
-            if (serviceAvailable) {
-                LOGGER.log(Level.INFO, "Self-test passed: mDNS service {0} is available at {1}",
-                        new Object[]{serviceName, testUrl});
-            } else {
-                LOGGER.log(Level.SEVERE, "Self-test failed: mDNS service {0} is NOT available at {1}",
-                        new Object[]{serviceName, testUrl});
-            }
-        } else {
-            LOGGER.log(Level.SEVERE, "Self-test failed: mDNS service not found for {0}", serviceName);
-        }
-    }
-
-    /**
-     * Simulate resolving the service by checking if the URL responds.
-     *
-     * @param url The URL to resolve.
-     * @return True if the service is discoverable, false otherwise.
-     */
-    private boolean resolveService(String url) {
-        for (ServiceInfo info : registeredServices.values()) {
-            String resolvedUrl = getServiceURL(info.getName());
-            if (resolvedUrl != null && resolvedUrl.equals(url)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -124,6 +96,8 @@ public class mDNS_Service {
      * @param concurrent If true, starts services in separate threads and performs self-tests.
      */
     public void startAll(boolean concurrent) {
+        LOGGER.log(Level.INFO, "Starting all mDNS services (concurrent: {0})", concurrent);
+
         startService("mobile_lyrics", QueleaProperties.get().getMobLyricsPort(), concurrent);
         startService("remote_control", QueleaProperties.get().getRemoteControlPort(), concurrent);
     }
@@ -139,6 +113,8 @@ public class mDNS_Service {
      * Stop all running mDNS services.
      */
     public void stopAll() {
+        LOGGER.log(Level.INFO, "Stopping all mDNS services");
+
         if (jmdns != null) {
             registeredServices.forEach((serviceName, serviceInfo) -> {
                 try {
@@ -151,6 +127,7 @@ public class mDNS_Service {
             registeredServices.clear();
             try {
                 jmdns.close();
+                LOGGER.log(Level.INFO, "JmDNS instance closed successfully.");
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Failed to close JmDNS", e);
             }
@@ -167,7 +144,9 @@ public class mDNS_Service {
         ServiceInfo serviceInfo = registeredServices.get(serviceName);
         if (serviceInfo != null) {
             // Return the alias (service name) in the URL
-            return "http://" + serviceInfo.getName() + ".local:" + serviceInfo.getPort();
+            String url = "http://" + serviceInfo.getName() + ".local:" + serviceInfo.getPort();
+            LOGGER.log(Level.INFO, "Generated service URL for {0}: {1}", new Object[]{serviceName, url});
+            return url;
         }
         LOGGER.log(Level.WARNING, "Service not found: {0}", serviceName);
         return null;

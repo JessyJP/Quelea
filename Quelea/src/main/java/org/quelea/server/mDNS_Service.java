@@ -30,7 +30,7 @@ public class mDNS_Service {
      *
      * @param serviceName The name of the service to advertise.
      * @param port        The port that the service runs on.
-     * @param concurrent  If true, starts the service in a separate thread and performs self-test.
+     * @param concurrent  If true, starts the service in a separate thread and performs self-test after 30 seconds.
      */
     public void startService(String serviceName, int port, boolean concurrent) {
         LOGGER.log(Level.INFO, "Attempting to start mDNS service: {0} on port {1} (concurrent: {2})",
@@ -40,6 +40,7 @@ public class mDNS_Service {
             Thread serviceThread = new Thread(() -> {
                 try {
                     startServiceInternal(serviceName, port);
+                    Thread.sleep(30000);  // Wait for 30 seconds before running the test
                     selfTest(serviceName, port);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error starting mDNS service: " + serviceName, e);
@@ -106,7 +107,7 @@ public class mDNS_Service {
      * Overloaded version of startAll that defaults to concurrent = false.
      */
     public void startAll() {
-        startAll(false);  // Default to sequential (concurrent = false)
+        startAll(true);  // Default to concurrent = true with a 30 seconds wait before testing
     }
 
     /**
@@ -276,6 +277,5 @@ public class mDNS_Service {
             return false;
         }
     }
-
 
 }

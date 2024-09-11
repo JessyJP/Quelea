@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="static/defaultrcspage.css"> <!-- Reuse main CSS -->
+</head>
+<body>
+<div id="settingsOverlay" class="settingsOverlay">
+    <h2>Settings</h2>
+    <div class="settingsContent">
+        <label for="refreshIntervalInput">Refresh Interval (ms):</label>
+        <input type="number" id="refreshIntervalInput">
+
+        <label for="controlsVisibilityCheckbox">Show Controls:</label>
+        <input type="checkbox" id="controlsVisibilityCheckbox">
+
+        <label for="themeSelect">Theme:</label>
+        <select id="themeSelect">
+            <option value="default">Default</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+        </select>
+
+        <button onclick="saveSettings()">Save</button>
+        <button onclick="closeSettings()">Cancel</button>
+    </div>
+</div>
+</body>
+</html>

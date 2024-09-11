@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Overlay Page</title>
+    <style>
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .close-btn {
+            background: #606061;
+            color: white;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        #overlay-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin: 10% auto;
+            text-align: center;
+        }
+        #preview-container {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<div id="overlay-content">
+    <span class="close-btn" onclick="window.parent.closeOverlay()">X</span>
+    <h2>Overlay Content</h2>
+    <p>This is some default content inside the overlay.</p>
+
+    <!-- Preview Container -->
+    <div id="preview-container">
+        <p>Preview Content Here</p>
+        <p>This could be an image, text, or anything else you want to display in the preview.</p>
+    </div>
+</div>
+</body>
+</html>

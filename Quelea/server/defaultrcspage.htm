@@ -415,6 +415,9 @@
             var lyriccache;
             var statuscache;
             var schedulecache;
+
+            var refreshTimeout = 100;
+
             function setup()
             {
                 getTranslations();
@@ -422,7 +425,7 @@
                     loadXMLDoc();
                     stateCheck();
                     scheduleCheck();
-                }, 400);
+                }, refreshTimeout);
 
                 xmlhttp.onreadystatechange = function ()
                 {

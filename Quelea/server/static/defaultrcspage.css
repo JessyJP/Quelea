@@ -1,0 +1,296 @@
+body {
+    font-family: 'DejaVu Sans', sans-serif;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.toggleButton {
+    width: 5em;
+    height: 5em;
+    margin-right: 2em;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.52);
+    position: sticky;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: #dfdfdf;
+}
+
+.navButton {
+    margin-bottom: 10px;
+    width: 1.2em;
+    max-width: 150px;
+    background-color: #dfdfdf;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.52);
+    border-radius: 10%;
+    font-size: 3em;
+    text-align: center;
+}
+
+.navButtonContainer {
+    position: fixed;
+    width: 3em;
+    right: 0;
+    margin-right: 2em;
+    margin-top: 25vh;
+    padding-bottom: 4vh;
+}
+
+.toggleButtonContainer {
+    position: fixed;
+    padding-top: 1em;
+    margin-top: 4em;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    background-color: white;
+}
+
+.slideButton {
+    height: 20vh;
+}
+
+.itemButton {
+    height: 13vh;
+}
+
+.unselected {
+    border: solid 1em #dfdfdf;
+}
+
+.active {
+    border: solid 1em #777777;
+}
+
+.smallbutton {
+    border: 1px solid #cacaca;
+    border-radius: 8px;
+    min-height: 40px;
+    max-height: 40px;
+    min-width: 80px;
+    max-width: 150px;
+    margin: 5px;
+    padding: 0px;
+    font-size: 1em;
+    vertical-align: middle;
+    color: black;
+}
+
+#center {
+    margin-top: 10em;
+    text-align: center;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    padding-bottom: 6em;
+}
+
+#lyrics {
+    display: inline-block;
+    font-size: 1em;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.inner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+iframe {
+    border: none;
+}
+
+#logout {
+    text-align: right;
+    position: fixed;
+    margin-bottom: 20px;
+}
+
+#logout button {
+    text-align: center;
+    width: 25%;
+    height: 20%;
+    min-height: 100px;
+    min-width: 100px;
+    max-width: 200px;
+    margin-top: 25px;
+    margin: 10px;
+    padding: 0px;
+    font-size: 2em;
+}
+
+.empty {
+    font-size: 100%;
+    cursor: pointer;
+    margin: 0px;
+}
+
+#slider {
+    width: 500px;
+    top: 100px;
+    position: absolute;
+    z-index: 2;
+}
+
+#scheduleHeader {
+    width: 18em;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+#scheduleHeader h3 {
+    background-color: #111111;
+    height: auto;
+    color: white;
+    margin: 0;
+    padding: 1.1em;
+}
+
+#sidebar {
+    position: absolute;
+    top: 180px;
+    left: 18px;
+}
+
+#schedule {
+    text-align: left;
+    height: auto;
+    overflow: auto;
+}
+
+.title {
+    color: #ff4141;
+}
+
+.drawer {
+    height: 100vh;
+    width: 0px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+#drawerButtonContainer {
+    transition: 0.5s;
+    position: fixed;
+    text-align: right;
+    margin-left: 1em;
+    left: 0;
+}
+
+#drawerButtonContainer span {
+    transition: 0.5s;
+}
+
+#searchBox {
+    transition: 0.5s;
+    z-index: 2;
+}
+
+#titlebar {
+    width: 100%;
+    height: 4em;
+    background: #111111;
+    text-align: left;
+    position: fixed;
+}
+
+.titlebarIcons {
+    color: white;
+    font-size: 3em;
+    cursor: pointer;
+}
+
+#actionButtonContainer {
+    position: absolute;
+    text-align: right;
+    margin-right: 1em;
+    right: 0;
+    transition: 0.5s;
+}
+
+#resultList {
+    position: fixed;
+    text-align: right;
+    margin-right: 1em;
+    right: 0;
+    top: 4em;
+    width: 16em;
+    background: white;
+    visibility: hidden;
+    padding: 1em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 1;
+}
+
+.scheduleItem {
+    font-size: 1em;
+    padding: 20px 0 20px 18px;
+    margin: 0;
+    background-color: #fff;
+}
+
+.current {
+    font-weight: bold;
+    background: #90CAF9;
+}
+
+.preview {
+    background: #E0E0E0;
+}
+
+#schedule > hr {
+    margin: 0;
+    padding: 0;
+}
+
+#suggestions {
+    z-index: 3;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 16em;
+    padding: 0.02em;
+    position: fixed;
+    top: 4em;
+    right: 1em;
+    background: white;
+    visibility: hidden;
+}
+
+#suggestions p:hover {
+    color: grey;
+}
+
+#songResults {
+    width: 16em;
+    height: 250px;
+}
+
+#bibleFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: left;
+}
+
+@media screen and (max-width: 500px) {
+    #center {
+        padding-right: 3em;
+    }
+}

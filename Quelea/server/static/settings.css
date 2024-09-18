@@ -1,0 +1,118 @@
+/* General body styles */
+body {
+    font-family: 'DejaVu Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Light background */
+    color: #333; /* Dark text color for readability */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.settingsOverlay {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+    text-align: center;
+}
+
+.settingsOverlay h2 {
+    margin-bottom: 20px;
+    color: #111;
+}
+
+/* Style for the form inputs */
+.settingsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+/* Style for labels */
+.settingsContent label {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Style for text inputs, checkboxes, and select dropdown */
+.settingsContent input[type="number"],
+.settingsContent input[type="checkbox"],
+.settingsContent select {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Checkbox specific styles */
+.settingsContent input[type="checkbox"] {
+    width: auto;
+    margin-left: 0;
+}
+
+/* Button styles */
+button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Cancel button specific style */
+button:nth-child(2) {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+
+button:nth-child(2):hover {
+    background-color: #495057;
+}
+
+/* Dark theme overrides */
+body.dark {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+.settingsOverlay.dark {
+    background-color: #444;
+    color: #f5f5f5;
+}
+
+.settingsContent label.dark {
+    color: #ccc;
+}
+
+.settingsContent input[type="number"].dark,
+.settingsContent input[type="checkbox"].dark,
+.settingsContent select.dark {
+    background-color: #555;
+    color: #f5f5f5;
+    border: 1px solid #777;
+}
+
+button.dark {
+    background-color: #28a745;
+}
+
+button.dark:hover {
+    background-color: #218838;
+}

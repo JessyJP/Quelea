@@ -25,12 +25,19 @@
         <span id="drawerIcon" onclick="toggleDrawer()" class="titlebarIcons">&#9776;</span>
     </div>
     <div id="actionButtonContainer">
+        <span id="fullscreenIcon" class="titlebarIcons" onclick="openFullScreen()">⛶</span> <!-- Fullscreen Icon -->
+        <span id="simpleControlIcon" class="titlebarIcons" onclick="simpleControl()">🛠️</span> <!-- Simple Control Icon -->
+
         <span id="searchIcon" class="titlebarIcons" onclick="toggleSearch()">🔍</span>
         <input id="searchBox" type="text" style="width:0; height:2.5em; display:none;" onkeyup="search()"/>
+
+        <!-- Settings and Song Preview icons added -->
+        <span id="songPreviewIcon" class="titlebarIcons" onclick="previewSong()">🎵</span> <!-- Song Preview Icon -->
+        <span id="settingsIcon" class="titlebarIcons" onclick="openSettings()">⚙️</span> <!-- Settings Icon -->
     </div>
 </div>
-<div id="mainContent" onclick="closeDrawer()">
 
+<div id="mainContent" onclick="closeDrawer()">
     <div class="toggleButtonContainer">
         <button type="button" onclick="logo();" id="logoButton" class="unselected toggleButton"
                 style="background-image: url(logo.png);"></button>

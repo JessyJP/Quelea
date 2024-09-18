@@ -87,7 +87,7 @@ public class RemoteControlServer {
     private final Map<String, byte[]> fileCache;
     public int count = 0;
     private static final String STATIC_DIRECTORY = "server/static/";
-    private static final String ICON_DIRECTORY = "server/icon/";
+    private static final String ICON_DIRECTORY = "icons/";
 
     /**
      * Create a new mobile lyrics server on a specified port. The port must not
@@ -138,8 +138,8 @@ public class RemoteControlServer {
         server.createContext("/slides", new PresentationSlidesHandler());
         server.createContext("/transpose", new TransposeSongHandler());
         // Add context for static files
-        server.createContext("/static/", new StaticFileHandler(STATIC_DIRECTORY));
-        server.createContext("/icons/", new StaticFileHandler(ICON_DIRECTORY));
+        server.createContext("/static/", new StaticFileHandler(STATIC_DIRECTORY, "/static/"));
+        server.createContext("/icons/", new StaticFileHandler(ICON_DIRECTORY, "/icons/"));
         rootcontext.getFilters().add(new ParameterFilter());
         server.setExecutor(null);
     }
@@ -1200,20 +1200,23 @@ public class RemoteControlServer {
 
     }
 
-    // New handler for static files
+    // Static file handler
     private class StaticFileHandler implements HttpHandler {
         private final String baseDirectory;
+        private final String prefix;
         private final Map<String, byte[]> fileCache = new HashMap<>();
         private final boolean cacheEnabled = USE_CACHE;
 
-        public StaticFileHandler(String baseDirectory) {
+        public StaticFileHandler(String baseDirectory, String prefix) {
             this.baseDirectory = baseDirectory;
+            this.prefix = prefix;
         }
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             String requestPath = exchange.getRequestURI().getPath();
-            String filePath = baseDirectory + requestPath.replace("/static/", "");
+            // Remove the prefix from the request path
+            String filePath = baseDirectory + requestPath.replace(prefix, "");
 
             byte[] fileBytes;
 

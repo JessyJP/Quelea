@@ -86,6 +86,8 @@ public class RemoteControlServer {
     private String pageContent;
     private final Map<String, byte[]> fileCache;
     public int count = 0;
+    private static final String STATIC_DIRECTORY = "server/static/";
+    private static final String ICON_DIRECTORY = "server/icon/";
 
     /**
      * Create a new mobile lyrics server on a specified port. The port must not
@@ -135,6 +137,9 @@ public class RemoteControlServer {
         server.createContext("/themethumb", new ThemeThumbnailsHandler());
         server.createContext("/slides", new PresentationSlidesHandler());
         server.createContext("/transpose", new TransposeSongHandler());
+        // Add context for static files
+        server.createContext("/static/", new StaticFileHandler(STATIC_DIRECTORY));
+        server.createContext("/icons/", new StaticFileHandler(ICON_DIRECTORY));
         rootcontext.getFilters().add(new ParameterFilter());
         server.setExecutor(null);
     }
@@ -1193,6 +1198,49 @@ public class RemoteControlServer {
             }
         }
 
+    }
+
+    // New handler for static files
+    private class StaticFileHandler implements HttpHandler {
+        private final String baseDirectory;
+        private final Map<String, byte[]> fileCache = new HashMap<>();
+        private final boolean cacheEnabled = USE_CACHE;
+
+        public StaticFileHandler(String baseDirectory) {
+            this.baseDirectory = baseDirectory;
+        }
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            String requestPath = exchange.getRequestURI().getPath();
+            String filePath = baseDirectory + requestPath.replace("/static/", "");
+
+            byte[] fileBytes;
+
+            // Check cache first
+            if (cacheEnabled && fileCache.containsKey(filePath)) {
+                fileBytes = fileCache.get(filePath);
+            } else {
+                // If file is not cached, read it from disk
+                if (Files.exists(Paths.get(filePath))) {
+                    fileBytes = Files.readAllBytes(Paths.get(filePath));
+                    // Store the file in cache if USE_CACHE is enabled
+                    if (cacheEnabled) {
+                        fileCache.put(filePath, fileBytes);
+                    }
+                    exchange.sendResponseHeaders(200, fileBytes.length);
+                } else {
+                    String response = "File not found";
+                    fileBytes = response.getBytes();
+                    exchange.sendResponseHeaders(404, fileBytes.length);
+                }
+            }
+
+            // Send the file or error response
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(fileBytes);
+            }
+        }
     }
 
     //--------------- Set of MIDI control functions

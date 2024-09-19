@@ -28,14 +28,11 @@
     </div>
     <div id="actionButtonContainer">
         <span id="fullscreenIcon" class="titlebarIcons" onclick="toggleFullScreen()">⛶</span> <!-- Fullscreen Icon -->
-        <span id="simpleControlIcon" class="titlebarIcons" onclick="toggleControls()">🛠️</span>
-
         <span id="searchIcon" class="titlebarIcons" onclick="toggleSearch()">🔍</span>
         <input id="searchBox" type="text" style="width:0; height:2.5em; display:none;" onkeyup="search()"/>
 
-        <!-- Settings and Song Preview icons added -->
         <span id="songPreviewIcon" class="titlebarIcons" onclick="previewSong()">🎵</span> <!-- Song Preview Icon -->
-        <span id="settingsIcon" class="titlebarIcons" onclick="openSettings()">⚙️</span> <!-- Settings Icon -->
+        <span id="settingsIcon" class="titlebarIcons" onclick="loadSettings()">⚙️</span> <!-- Settings Icon -->
     </div>
 </div>
 
@@ -80,9 +77,10 @@
             </select>
         </div>
     </div>
-    <div>
-    </div>
 </div>
+
+<!-- Settings Panel loaded dynamically -->
+<iframe id="settingsFrame" src="" style="display:none; width:100%; height:100%; position:fixed; top:0; left:0; z-index:100;"></iframe>
 
 </body>
 </html>

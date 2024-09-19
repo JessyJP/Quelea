@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-    <link rel="stylesheet" href="static/defaultrcspage.css"> <!-- Reuse main CSS -->
+    <link rel="stylesheet" href="settings.css"> <!-- Reuse main CSS -->
 </head>
 <body>
-<div id="settingsOverlay" class="settingsOverlay">
-    <h2>Settings</h2>
-    <div class="settingsContent">
+<div id="settingsOverlay" class="settingsOverlay" onclick="closeSettings(event)">
+    <div class="settingsContent" onclick="event.stopPropagation()"> <!-- Prevent event from bubbling to the overlay -->
+        <h2>Settings</h2>
         <label for="refreshIntervalInput">Refresh Interval (ms):</label>
         <input type="number" id="refreshIntervalInput">
 
         <label for="controlsVisibilityCheckbox">Show Controls:</label>
-        <input type="checkbox" id="controlsVisibilityCheckbox">
+        <input type="checkbox" id="controlsVisibilityCheckbox" onchange="toggleControlsFromSettings()">
 
         <label for="themeSelect">Theme:</label>
         <select id="themeSelect">
@@ -23,9 +23,11 @@
             <option value="light">Light</option>
         </select>
 
-        <button onclick="saveSettings()">Save</button>
-        <button onclick="closeSettings()">Cancel</button>
+        <button onclick="resetSettings()">Reset</button>
+        <button onclick="closeSettings()">Close</button> <!-- Close button -->
     </div>
 </div>
+
+<script src="static/settings.js"></script> <!-- JS file for settings functionality -->
 </body>
 </html>

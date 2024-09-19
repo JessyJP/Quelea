@@ -9,7 +9,8 @@
     <link rel="manifest" href="static/manifest.json">
     <link rel="stylesheet" href="static/defaultrcspage.css"> <!-- Existing CSS link -->
     <script src="static/defaultrcspage.js"></script> <!-- Existing JS file -->
-    <script src="static/fullscreen.js"></script> <!-- Existing JS file -->
+    <script src="static/fullscreen.js"></script> <!-- JS file for fullscreen functionality -->
+    <script src="static/settings.js"></script> <!-- JS file for settings functionality -->
 </head>
 <body>
 <div id="leftDrawer" class="drawer">
@@ -26,8 +27,8 @@
         <span id="drawerIcon" onclick="toggleDrawer()" class="titlebarIcons">&#9776;</span>
     </div>
     <div id="actionButtonContainer">
-        <span id="fullscreenIcon" class="titlebarIcons" onclick="openFullScreen()">⛶</span> <!-- Fullscreen Icon -->
-        <span id="simpleControlIcon" class="titlebarIcons" onclick="simpleControl()">🛠️</span> <!-- Simple Control Icon -->
+        <span id="fullscreenIcon" class="titlebarIcons" onclick="toggleFullScreen()">⛶</span> <!-- Fullscreen Icon -->
+        <span id="simpleControlIcon" class="titlebarIcons" onclick="toggleControls()">🛠️</span>
 
         <span id="searchIcon" class="titlebarIcons" onclick="toggleSearch()">🔍</span>
         <input id="searchBox" type="text" style="width:0; height:2.5em; display:none;" onkeyup="search()"/>

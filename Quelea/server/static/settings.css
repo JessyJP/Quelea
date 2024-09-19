@@ -12,13 +12,14 @@ body {
 }
 
 .settingsOverlay {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8); /* Light and mostly transparent */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 80%;
     max-width: 500px;
     padding: 20px;
     text-align: center;
+    position: relative;
 }
 
 .settingsOverlay h2 {
@@ -76,7 +77,16 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Cancel button specific style */
+/* Reset button specific style */
+button:nth-child(1) {
+    background-color: #28a745;
+}
+
+button:nth-child(1):hover {
+    background-color: #218838;
+}
+
+/* Close button specific style */
 button:nth-child(2) {
     background-color: #6c757d;
     margin-left: 10px;
@@ -93,7 +103,7 @@ body.dark {
 }
 
 .settingsOverlay.dark {
-    background-color: #444;
+    background-color: rgba(68, 68, 68, 0.9); /* Adjusted transparency for dark theme */
     color: #f5f5f5;
 }
 

@@ -1,3 +1,6 @@
+// ===========================================================================
+// Class Definition: Manages application state and handles saving, loading, and resetting settings
+// ===========================================================================
 class State {
     constructor() {
         // Initialize default values
@@ -43,61 +46,68 @@ class State {
         this.theme = theme;
         this.saveState();
     }
+
+    // Reset to default values
+    reset() {
+        this.refreshInterval = 100;
+        this.controlsVisible = true;
+        this.theme = "default";
+        this.saveState();
+    }
 }
 
-// Global state object
+// ===========================================================================
+// Global State Variables and Configurations
+// ===========================================================================
 const appState = new State();
-
-// Load the saved state from localStorage (or use defaults)
 appState.loadState();
 
-// Function to show the settings overlay panel
-function openSettings() {
-    const overlay = document.getElementById("settingsOverlay");
-    const refreshIntervalInput = document.getElementById("refreshIntervalInput");
-    const controlsVisibilityCheckbox = document.getElementById("controlsVisibilityCheckbox");
-    const themeSelect = document.getElementById("themeSelect");
+// ===========================================================================
+// Methods to Handle the Settings and the Window
+// ===========================================================================
 
-    // Set current state in the form inputs
-    refreshIntervalInput.value = appState.refreshInterval;
-    controlsVisibilityCheckbox.checked = appState.controlsVisible;
-    themeSelect.value = appState.theme;
-
-    // Show the overlay
-    overlay.style.display = "block";
+// Function to load settings into the settings panel
+function showSettingsOverlayWindow() {
+    const settingsFrame = document.getElementById("settingsFrame");
+    settingsFrame.src = "static/settings.html";
+    settingsFrame.style.display = "block"; // Show the iframe
 }
 
-// Function to close the settings overlay panel
-function closeSettings() {
-    const overlay = document.getElementById("settingsOverlay");
-    overlay.style.display = "none";
-}
-
-// Function to save settings from the overlay
-function saveSettings() {
-    const refreshIntervalInput = document.getElementById("refreshIntervalInput");
-    const controlsVisibilityCheckbox = document.getElementById("controlsVisibilityCheckbox");
-    const themeSelect = document.getElementById("themeSelect");
-
-    // Update the app state based on user input
-    appState.setRefreshInterval(parseInt(refreshIntervalInput.value));
-    appState.controlsVisible = controlsVisibilityCheckbox.checked;
-    appState.setTheme(themeSelect.value);
-
-    // Apply controls visibility based on updated state
-    if (appState.controlsVisible) {
-        showControls();
-    } else {
-        hideControls();
+// Function to close settings when clicking outside the content area
+function closeSettings(event) {
+    const overlay = document.querySelector('.settingsOverlay');
+    const content = document.querySelector('.settingsContent');
+    // Check if the click is outside the settings content
+    if (event.target === overlay && !content.contains(event.target)) {
+        overlay.style.display = 'none'; // Hide the settings overlay
     }
-
-    // Close the settings overlay
-    closeSettings();
 }
 
-// Function to toggle the visibility of controls (called from toggleControls)
-function toggleControls() {
-    if (appState.toggleControlsVisibility()) {
+// Attach the close function to click on the overlay itself
+document.querySelector('.settingsOverlay').addEventListener('click', closeSettings);
+
+// Function to close settings via the close button
+function closeSettingsFromButton() {
+    document.querySelector('.settingsOverlay').style.display = 'none';
+}
+
+// Function to reset settings
+function resetSettings() {
+    appState.reset();
+    // Update the UI with default values
+    document.getElementById("refreshIntervalInput").value = appState.refreshInterval;
+    document.getElementById("controlsVisibilityCheckbox").checked = appState.controlsVisible;
+    document.getElementById("themeSelect").value = appState.theme;
+}
+
+// ===========================================================================
+// Methods to Handle Specific Settings
+// ===========================================================================
+
+// Function to toggle controls visibility from settings
+function toggleControlsFromSettings() {
+    const controlsVisibilityCheckbox = document.getElementById("controlsVisibilityCheckbox");
+    if (controlsVisibilityCheckbox.checked) {
         showControls();
     } else {
         hideControls();
@@ -110,7 +120,6 @@ function showControls() {
     document.querySelector('.navButtonContainer').style.display = "block";
     document.getElementById('center').classList.remove("center-simple-controls");
     document.getElementById('center').classList.add("center-default");
-    document.getElementById('simpleControlIcon').innerHTML = "🛠️";
 }
 
 // Function to hide controls
@@ -119,14 +128,4 @@ function hideControls() {
     document.querySelector('.navButtonContainer').style.display = "none";
     document.getElementById('center').classList.remove("center-default");
     document.getElementById('center').classList.add("center-simple-controls");
-    document.getElementById('simpleControlIcon').innerHTML = "❌";
 }
-
-// Load state when the page loads
-window.onload = function() {
-    if (appState.controlsVisible) {
-        showControls();
-    } else {
-        hideControls();
-    }
-};

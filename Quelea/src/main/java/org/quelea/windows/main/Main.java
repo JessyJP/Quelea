@@ -192,7 +192,7 @@ public final class Main extends Application {
                 LOGGER.log(Level.INFO, "Starting mDNS service for Quelea Server");
                 mDNS_Service mdnsService = new mDNS_Service();
                 QueleaApp.get().setMdnsService(mdnsService);  // Store mDNS service in QueleaApp
-//                mdnsService.startAll();  // Register the mDNS services for both Mobile Lyrics and Remote Control
+                mdnsService.startAll();  // Register the mDNS services for both Mobile Lyrics and Remote Control
 
                 // Add a shutdown hook to stop mDNS services when the app is closed
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {

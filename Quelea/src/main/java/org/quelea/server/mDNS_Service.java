@@ -99,8 +99,8 @@ public class mDNS_Service {
     public void startAll(boolean concurrent) {
         LOGGER.log(Level.INFO, "Starting all mDNS services (concurrent: {0})", concurrent);
 
-        startService("mobile_lyrics", QueleaProperties.get().getMobLyricsPort(), concurrent);
-        startService("remote_control", QueleaProperties.get().getRemoteControlPort(), concurrent);
+        startService("lyricsq", QueleaProperties.get().getMobLyricsPort(), concurrent);
+        startService("remoteq", QueleaProperties.get().getRemoteControlPort(), concurrent);
     }
 
     /**
@@ -145,7 +145,7 @@ public class mDNS_Service {
         ServiceInfo serviceInfo = registeredServices.get(serviceName);
         if (serviceInfo != null) {
             // Return the alias (service name) in the URL
-            String url = "http://" + serviceInfo.getName() + ".local:" + serviceInfo.getPort();
+            String url = "http://" + serviceInfo.getName() + ":" + serviceInfo.getPort();//+ ".local:"
             LOGGER.log(Level.INFO, "Generated service URL for {0}: {1}", new Object[]{serviceName, url});
             return url;
         }
@@ -218,7 +218,7 @@ public class mDNS_Service {
         }
 
         // Test .local domain URL
-        String localDomainUrl = "http://" + serviceName + ".local:" + port;
+        String localDomainUrl = "http://" + serviceName  + ":"+ port;//+ ".local:"
         LOGGER.log(Level.INFO, "Testing connection to service at .local URL: {0}", localDomainUrl);
         localDomainSuccess = testConnection(localDomainUrl);
 

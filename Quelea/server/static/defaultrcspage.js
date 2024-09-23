@@ -332,25 +332,31 @@ function setCaretPosition(query) {
 
 // --------------------------------------------------------------------------
 function hideButtons() {
-    var toggleButtons = document.getElementsByClassName("toggleButtonContainer")[0];
+    var actionButton = document.getElementById("actionButtonContainer"); // Corrected from getElementsByID
     var navButtons = document.getElementsByClassName("navButtonContainer")[0];
 
-    if (toggleButtons) {
-        toggleButtons.style.display = "none"; // Hide the toggle buttons
+    if (actionButton) {
+        actionButton.style.display = "none"; // Hide the action buttons
     }
-    if (navButtons) {
-        navButtons.style.display = "none"; // Hide the navigation buttons
-    }
+//    if (toggleButtons) {
+//        toggleButtons.style.display = "none"; // Hide the toggle buttons
+//    }
+//    if (navButtons) {
+//        navButtons.style.display = "none"; // Hide the navigation buttons
+//    }
 }
 
 function showButtons() {
-    var toggleButtons = document.getElementsByClassName("toggleButtonContainer")[0];
+    var actionButton = document.getElementById("actionButtonContainer"); // Corrected from getElementsByID
     var navButtons = document.getElementsByClassName("navButtonContainer")[0];
 
-    if (toggleButtons) {
-        toggleButtons.style.display = "block"; // Show the toggle buttons
+    if (actionButton) {
+        actionButton.style.display = "block"; // Show the action buttons
     }
-    if (navButtons) {
-        navButtons.style.display = "block"; // Show the navigation buttons
-    }
+//    if (toggleButtons) {
+//        toggleButtons.style.display = "block"; // Show the toggle buttons
+//    }
+//    if (navButtons) {
+//        navButtons.style.display = "block"; // Show the navigation buttons
+//    }
 }

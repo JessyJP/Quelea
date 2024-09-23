@@ -79,7 +79,7 @@ import org.quelea.windows.main.toolbars.MainToolbar;
  */
 public class RemoteControlServer {
 
-    private static final boolean USE_CACHE = true;
+    private static final boolean USE_CACHE = false;
     private static final Logger LOGGER = LoggerUtils.getLogger();
     private final HttpServer server;
     private boolean running;

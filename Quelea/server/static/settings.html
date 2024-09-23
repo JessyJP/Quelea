@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-    <link rel="stylesheet" href="settings.css"> <!-- Reuse main CSS -->
+    <link rel="stylesheet" href="settings.css"> <!-- Correct CSS path -->
+    <script src="settings.js"></script> <!-- Correct JS path -->
 </head>
 <body>
 <div id="settingsOverlay" class="settingsOverlay" onclick="closeSettings(event)">
@@ -24,10 +25,9 @@
         </select>
 
         <button onclick="resetSettings()">Reset</button>
-        <button onclick="closeSettings()">Close</button> <!-- Close button -->
+        <button onclick="closeSettingsFromButton()">Close</button> <!-- Correct function call -->
     </div>
 </div>
 
-<script src="static/settings.js"></script> <!-- JS file for settings functionality -->
 </body>
 </html>

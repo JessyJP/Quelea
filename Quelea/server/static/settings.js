@@ -75,21 +75,22 @@ function showSettingsOverlayWindow() {
 
 // Function to close settings when clicking outside the content area
 function closeSettings(event) {
-    const overlay = document.querySelector('.settingsOverlay');
+    const overlay = document.getElementById('settingsOverlay');
     const content = document.querySelector('.settingsContent');
+
     // Check if the click is outside the settings content
-    if (event.target === overlay && !content.contains(event.target)) {
+    if (event.target === overlay) {
         overlay.style.display = 'none'; // Hide the settings overlay
     }
 }
 
-// Attach the close function to click on the overlay itself
-document.querySelector('.settingsOverlay').addEventListener('click', closeSettings);
-
 // Function to close settings via the close button
 function closeSettingsFromButton() {
-    document.querySelector('.settingsOverlay').style.display = 'none';
+    document.getElementById('settingsOverlay').style.display = 'none';
 }
+
+// Attach the close function to the overlay
+document.getElementById('settingsOverlay').addEventListener('click', closeSettings);
 
 // Function to reset settings
 function resetSettings() {

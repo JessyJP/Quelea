@@ -7,6 +7,7 @@ var statuscache;
 var schedulecache;
 
 var refreshTimeout = 100;
+var drawerExtension = "18em";
 
 function setup()
 {
@@ -197,23 +198,28 @@ function getSectionTitles() {
     }
 }
 function toggleDrawer() {
-    if (document.getElementById("leftDrawer").style.width !== "18em") {
+    // Compare with drawerExtension instead of hardcoded value
+    if (document.getElementById("leftDrawer").style.width !== drawerExtension) {
         openDrawer();
     } else {
         closeDrawer();
     }
 }
 function openDrawer() {
-    document.getElementById("leftDrawer").style.width = "18em";
-    document.getElementById("drawerButtonContainer").style.transform = "translate(18em, 0px)";
-    document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(18em, 0px)";
-    document.getElementById("drawerButtonContainer").style.msTransform = "translate(18em, 0px)";
+    // Use drawerExtension variable for setting width and transformations
+    document.getElementById("leftDrawer").style.width = drawerExtension;
+    document.getElementById("drawerButtonContainer").style.transform = `translate(${drawerExtension}, 0px)`;
+    document.getElementById("drawerButtonContainer").style.WebkitTransform = `translate(${drawerExtension}, 0px)`;
+    document.getElementById("drawerButtonContainer").style.msTransform = `translate(${drawerExtension}, 0px)`;
+    hideButtons(); // Hide buttons when the drawer is open
 }
 function closeDrawer() {
+    // Reset width and transformations to 0
     document.getElementById("leftDrawer").style.width = "0px";
     document.getElementById("drawerButtonContainer").style.transform = "translate(0px, 0px)";
     document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(0px, 0px)";
     document.getElementById("drawerButtonContainer").style.msTransform = "translate(0px, 0px)";
+    showButtons(); // Show buttons when the drawer is closed
 }
 function toggleSearch(close) {
     var searchBox = document.getElementById("searchBox");
@@ -325,4 +331,36 @@ function setCaretPosition(query) {
     var caretPos = query.length;
     elem.focus();
     elem.setSelectionRange(caretPos, caretPos);
+}
+
+
+// --------------------------------------------------------------------------
+function hideButtons() {
+    var actionButton = document.getElementById("actionButtonContainer"); // Corrected from getElementsByID
+    var navButtons = document.getElementsByClassName("navButtonContainer")[0];
+
+    if (actionButton) {
+        actionButton.style.display = "none"; // Hide the action buttons
+    }
+//    if (toggleButtons) {
+//        toggleButtons.style.display = "none"; // Hide the toggle buttons
+//    }
+//    if (navButtons) {
+//        navButtons.style.display = "none"; // Hide the navigation buttons
+//    }
+}
+
+function showButtons() {
+    var actionButton = document.getElementById("actionButtonContainer"); // Corrected from getElementsByID
+    var navButtons = document.getElementsByClassName("navButtonContainer")[0];
+
+    if (actionButton) {
+        actionButton.style.display = "block"; // Show the action buttons
+    }
+//    if (toggleButtons) {
+//        toggleButtons.style.display = "block"; // Show the toggle buttons
+//    }
+//    if (navButtons) {
+//        navButtons.style.display = "block"; // Show the navigation buttons
+//    }
 }

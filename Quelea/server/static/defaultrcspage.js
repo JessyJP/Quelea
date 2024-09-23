@@ -7,6 +7,7 @@ var statuscache;
 var schedulecache;
 
 var refreshTimeout = 100;
+var drawerExtension = "18em";
 
 function setup()
 {
@@ -197,20 +198,23 @@ function getSectionTitles() {
     }
 }
 function toggleDrawer() {
-    if (document.getElementById("leftDrawer").style.width !== "18em") {
+    // Compare with drawerExtension instead of hardcoded value
+    if (document.getElementById("leftDrawer").style.width !== drawerExtension) {
         openDrawer();
     } else {
         closeDrawer();
     }
 }
 function openDrawer() {
-    document.getElementById("leftDrawer").style.width = "18em"; // The width the drawer extends to
-    document.getElementById("drawerButtonContainer").style.transform = "translate(18em, 0px)";
-    document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(18em, 0px)";
-    document.getElementById("drawerButtonContainer").style.msTransform = "translate(18em, 0px)";
+    // Use drawerExtension variable for setting width and transformations
+    document.getElementById("leftDrawer").style.width = drawerExtension;
+    document.getElementById("drawerButtonContainer").style.transform = `translate(${drawerExtension}, 0px)`;
+    document.getElementById("drawerButtonContainer").style.WebkitTransform = `translate(${drawerExtension}, 0px)`;
+    document.getElementById("drawerButtonContainer").style.msTransform = `translate(${drawerExtension}, 0px)`;
     hideButtons(); // Hide buttons when the drawer is open
 }
 function closeDrawer() {
+    // Reset width and transformations to 0
     document.getElementById("leftDrawer").style.width = "0px";
     document.getElementById("drawerButtonContainer").style.transform = "translate(0px, 0px)";
     document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(0px, 0px)";

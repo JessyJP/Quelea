@@ -128,10 +128,10 @@ public class MobileServerPreference extends SimpleControl<StringField, StackPane
 
         Text mdnsText = null;
         if (isLyrics){
-            mdnsText = createClickableMdnsLabel("mobile_lyrics");
+            mdnsText = createClickableMdnsLabel("lyricsq");
         }
         else{
-            mdnsText = createClickableMdnsLabel("remote_control");
+            mdnsText = createClickableMdnsLabel("remoteq");
         }
 
         HBox hBox = new HBox();

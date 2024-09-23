@@ -204,16 +204,18 @@ function toggleDrawer() {
     }
 }
 function openDrawer() {
-    document.getElementById("leftDrawer").style.width = "18em";
+    document.getElementById("leftDrawer").style.width = "18em"; // The width the drawer extends to
     document.getElementById("drawerButtonContainer").style.transform = "translate(18em, 0px)";
     document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(18em, 0px)";
     document.getElementById("drawerButtonContainer").style.msTransform = "translate(18em, 0px)";
+    hideButtons(); // Hide buttons when the drawer is open
 }
 function closeDrawer() {
     document.getElementById("leftDrawer").style.width = "0px";
     document.getElementById("drawerButtonContainer").style.transform = "translate(0px, 0px)";
     document.getElementById("drawerButtonContainer").style.WebkitTransform = "translate(0px, 0px)";
     document.getElementById("drawerButtonContainer").style.msTransform = "translate(0px, 0px)";
+    showButtons(); // Show buttons when the drawer is closed
 }
 function toggleSearch(close) {
     var searchBox = document.getElementById("searchBox");
@@ -325,4 +327,30 @@ function setCaretPosition(query) {
     var caretPos = query.length;
     elem.focus();
     elem.setSelectionRange(caretPos, caretPos);
+}
+
+
+// --------------------------------------------------------------------------
+function hideButtons() {
+    var toggleButtons = document.getElementsByClassName("toggleButtonContainer")[0];
+    var navButtons = document.getElementsByClassName("navButtonContainer")[0];
+
+    if (toggleButtons) {
+        toggleButtons.style.display = "none"; // Hide the toggle buttons
+    }
+    if (navButtons) {
+        navButtons.style.display = "none"; // Hide the navigation buttons
+    }
+}
+
+function showButtons() {
+    var toggleButtons = document.getElementsByClassName("toggleButtonContainer")[0];
+    var navButtons = document.getElementsByClassName("navButtonContainer")[0];
+
+    if (toggleButtons) {
+        toggleButtons.style.display = "block"; // Show the toggle buttons
+    }
+    if (navButtons) {
+        navButtons.style.display = "block"; // Show the navigation buttons
+    }
 }

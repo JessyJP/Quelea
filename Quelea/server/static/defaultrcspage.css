@@ -78,7 +78,7 @@ body {
     color: black;
 }
 
-#center {
+.center-default {
     margin-top: 10em;
     text-align: center;
     width: 60%;
@@ -86,6 +86,14 @@ body {
     margin-right: auto;
     height: auto;
     padding-bottom: 6em;
+}
+
+/* Modified state when simple controls are active */
+.center-simple-controls {
+    margin-top: 2em;   /* Reduce the margin */
+    width: 100%;       /* Expand to full width */
+    padding-bottom: 2em;
+    text-align: left;   /* Change text alignment if needed */
 }
 
 #lyrics {

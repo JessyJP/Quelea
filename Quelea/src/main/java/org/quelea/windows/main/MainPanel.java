@@ -38,7 +38,7 @@ public class MainPanel extends BorderPane {
     private static final Logger LOGGER = LoggerUtils.getLogger();
     private final SchedulePanel schedulePanel;
     private final LibraryPanel libraryPanel;
-    private final PreviewPanel previewPanel;
+    private PreviewPanel previewPanel; // Modified to allow dynamic recreation
     private final LivePanel livePanel;
     private final StatusPanelGroup statusPanelGroup;
     private final SplitPane mainSplit;
@@ -82,6 +82,53 @@ public class MainPanel extends BorderPane {
         statusPanelGroup = new StatusPanelGroup();
         setBottom(statusPanelGroup);
         LOGGER.log(Level.INFO, "Created main panel");
+    }
+
+    /**
+     * Set the visibility of the PreviewPanel based on the checkbox state.
+     *
+     * @param visibility true to show, false to hide the panel.
+     */
+    public void setPreviewPanelVisibility(boolean visibility) {
+        if (visibility) {
+            showPreviewPanel();
+        } else {
+            hidePreviewPanel();
+        }
+        adjustDividers();
+    }
+
+    /**
+     * Hide the PreviewPanel by clearing its content and removing it from the SplitPane.
+     */
+    private void hidePreviewPanel() {
+        previewPanel.isVisible = false;
+        previewPanel.removeDisplayable(); // Clear the content of the PreviewPanel
+        mainSplit.getItems().remove(previewPanel); // Remove the PreviewPanel from the SplitPane
+    }
+
+    /**
+     * Show the PreviewPanel by adding it back to the SplitPane.
+     */
+    private void showPreviewPanel() {
+        previewPanel.isVisible = true;
+        if (!mainSplit.getItems().contains(previewPanel)) {
+            mainSplit.getItems().add(1, previewPanel); // Re-add PreviewPanel at the correct position
+        }
+    }
+
+    /**
+     * Adjust the divider positions after showing or hiding the PreviewPanel.
+     * This ensures that the layout is recalculated correctly.
+     */
+    private void adjustDividers() {
+        double[] dividerPositions = mainSplit.getDividerPositions();
+        // Adjust positions as needed, for example:
+        if (mainSplit.getItems().contains(previewPanel)) {
+            mainSplit.setDividerPositions(0.3, 0.6); // Example positions with the PreviewPanel
+        } else {
+            mainSplit.setDividerPositions(0.5); // Example position when PreviewPanel is removed
+        }
     }
 
     /**

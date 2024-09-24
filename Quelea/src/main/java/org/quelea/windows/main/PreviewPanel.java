@@ -41,11 +41,13 @@ import org.quelea.services.utils.QueleaProperties;
 public class PreviewPanel extends LivePreviewPanel {
 
     private final Button liveButton;
+    public boolean isVisible; // Visibility state of the panel
 
     /**
      * Create a new preview lyrics panel.
      */
     public PreviewPanel() {
+        isVisible = true; // Initialize visibility state as true
         ToolBar header = new ToolBar();
         Label headerLabel = new Label(LabelGrabber.INSTANCE.getLabel("preview.heading"));
         headerLabel.setStyle("-fx-font-weight: bold;");
@@ -95,10 +97,11 @@ public class PreviewPanel extends LivePreviewPanel {
     public void goLive() {
         liveButton.fire();
     }
+    
 
     /**
      * Set the given displayable to be shown on the panel.
-     * <p/>
+     * If the panel is not visible, the displayable is directly passed to the LivePanel.
      *
      * @param d     the displayable to show.
      * @param index an index that may be used or ignored depending on the
@@ -106,6 +109,12 @@ public class PreviewPanel extends LivePreviewPanel {
      */
     @Override
     public void setDisplayable(Displayable d, int index) {
+        if (!isVisible) {
+            // Go live action
+            QueleaApp.get().getMainWindow().getMainPanel().getLivePanel().setDisplayable(d, index);
+            QueleaApp.get().getMainWindow().getMainPanel().getLivePanel().getCurrentPanel().requestFocus();
+            return; // Skip setting displayable if the panel is not visible
+        }
         super.setDisplayable(d, index);
         liveButton.setDisable(false);
         if (d instanceof WebDisplayable) {

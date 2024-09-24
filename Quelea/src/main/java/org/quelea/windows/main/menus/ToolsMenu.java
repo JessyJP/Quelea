@@ -2,7 +2,6 @@
  * This file is part of Quelea, free projection software for churches.
  *
  *
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +18,9 @@
 package org.quelea.windows.main.menus;
 
 import java.lang.ref.SoftReference;
-
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -50,6 +49,7 @@ public class ToolsMenu extends Menu {
     private final MenuItem liveTextItem;
     private final MenuItem testItem;
     private final MenuItem optionsItem;
+    private final CheckMenuItem togglePreviewPanelItem; // Checkbox to toggle PreviewPanel visibility
     private SoftReference<TestPaneDialog> testDialog = new SoftReference<>(null);
 
     /**
@@ -91,6 +91,14 @@ public class ToolsMenu extends Menu {
         optionsItem.setOnAction(new ShowOptionsActionHandler());
 
         getItems().add(optionsItem);
+
+        // Add checkbox to control PreviewPanel visibility
+        togglePreviewPanelItem = new CheckMenuItem(LabelGrabber.INSTANCE.getLabel("Toggle Preview Panel Visibility"));
+        togglePreviewPanelItem.setSelected(true); // Default to true, showing the panel initially
+        togglePreviewPanelItem.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN)); // Set shortcut Ctrl + Shift + V
+        togglePreviewPanelItem.setOnAction(event ->
+                QueleaApp.get().getMainWindow().getMainPanel().setPreviewPanelVisibility(togglePreviewPanelItem.isSelected()));
+        getItems().add(togglePreviewPanelItem);
     }
 
 }

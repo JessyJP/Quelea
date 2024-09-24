@@ -231,7 +231,7 @@ task zipMacPackr(type: Zip) {
 runPackr.finalizedBy(zipMacPackr);
 
 task dist(type: GradleBuild) {
-    tasks = ['labelcheck', 'downloadJres', 'downloadGStreamer', 'createQueleaExe64', 'copyToDist', 'runPackr', 'izpack', 'innosetup', 'releaseSummary']
+    tasks = ['labelcheck', 'downloadJres', 'downloadGStreamer', 'createQueleaExe64', 'copyToDist', 'izpack', 'innosetup', 'releaseSummary']
 }
 
 dependencies {

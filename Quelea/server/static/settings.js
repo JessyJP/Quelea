@@ -66,18 +66,15 @@ appState.loadState();
 // Methods to Handle the Settings and the Window
 // ===========================================================================
 
-// Function to load settings into the settings panel
+// Function to show the settings overlay window
 function showSettingsOverlayWindow() {
-    const settingsFrame = document.getElementById("settingsFrame");
-    settingsFrame.src = "static/settings.html";
-    settingsFrame.style.display = "block"; // Show the iframe
+    const overlay = document.getElementById('settingsOverlay');
+    overlay.style.display = 'block'; // Show the settings overlay
 }
 
 // Function to close settings when clicking outside the content area
 function closeSettings(event) {
     const overlay = document.getElementById('settingsOverlay');
-    const content = document.querySelector('.settingsContent');
-
     // Check if the click is outside the settings content
     if (event.target === overlay) {
         overlay.style.display = 'none'; // Hide the settings overlay
@@ -113,6 +110,7 @@ function toggleControlsFromSettings() {
     } else {
         hideControls();
     }
+    appState.toggleControlsVisibility();
 }
 
 // Function to show controls
@@ -130,3 +128,24 @@ function hideControls() {
     document.getElementById('center').classList.remove("center-default");
     document.getElementById('center').classList.add("center-simple-controls");
 }
+
+// ===========================================================================
+// Initialization
+// ===========================================================================
+
+// Initialize settings input values from the current state
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById("refreshIntervalInput").value = appState.refreshInterval;
+    document.getElementById("controlsVisibilityCheckbox").checked = appState.controlsVisible;
+    document.getElementById("themeSelect").value = appState.theme;
+
+    // Set event listeners for input changes
+    document.getElementById("refreshIntervalInput").addEventListener('input', (event) => {
+        appState.setRefreshInterval(parseInt(event.target.value) || 100);
+    });
+
+    document.getElementById("themeSelect").addEventListener('change', (event) => {
+        appState.setTheme(event.target.value);
+        document.body.className = event.target.value; // Apply the theme class to the body
+    });
+});

@@ -55,6 +55,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
+import org.quelea.windows.main.schedule.SchedulePanel;
+import javafx.scene.control.CheckBox;
+
 /**
  * The panel used to get bible verses.
  * <p/>
@@ -68,6 +71,7 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
     private final TextField passageSelector;
     private final WebView preview;
     private final Button addToSchedule;
+    private final CheckBox goLiveCheckBox; // Checkbox for "Go Live"
     private final List<BibleVerse> verses;
     private boolean multi;
     private ObservableList<BibleBook> master;
@@ -120,19 +124,27 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
                 }
             }
         });
-        getChildren().add(chapterPanel);
+
         BorderPane bottomPane = new BorderPane();
         VBox.setVgrow(bottomPane, Priority.SOMETIMES);
         bottomPane.setCenter(preview);
         addToSchedule = new Button(LabelGrabber.INSTANCE.getLabel("add.to.schedule.text"), new ImageView(new Image("file:icons/tick.png")));
+        goLiveCheckBox = new CheckBox("Go Live"); // Initialize the Go Live checkbox
+        HBox buttonPanel = new HBox(5, addToSchedule, goLiveCheckBox);
         addToSchedule.setOnAction((ActionEvent t) -> {
             BiblePassage passage = new BiblePassage(bibleSelector.getSelectionModel().getSelectedItem().getName(), getBibleLocation(), getVerses(), multi);
-            QueleaApp.get().getMainWindow().getMainPanel().getSchedulePanel().getScheduleList().add(passage);
+            SchedulePanel schedulePanel = QueleaApp.get().getMainWindow().getMainPanel().getSchedulePanel();
+            schedulePanel.getScheduleList().add(passage);
             passageSelector.setText("");
+
+            // Trigger Go Live if the checkbox is selected
+            if (goLiveCheckBox.isSelected()) {
+                Platform.runLater(() -> goLiveWithLastAddedItem(schedulePanel));
+            }
         });
         addToSchedule.setDisable(true);
-        chapterPanel.getChildren().add(addToSchedule);
-        getChildren().add(bottomPane);
+        chapterPanel.getChildren().add(buttonPanel);
+        getChildren().addAll(chapterPanel, bottomPane);
 
         addUpdateListeners();
         bibleSelector.valueProperty().addListener((ObservableValue<? extends Bible> ov, Bible t, Bible t1) -> {
@@ -198,6 +210,19 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
                 });
             }
         });
+    }
+
+    /**
+     * Set the last added item as live in the schedule.
+     *
+     * @param schedulePanel the schedule panel containing the schedule list.
+     */
+    private void goLiveWithLastAddedItem(SchedulePanel schedulePanel) {
+        int lastIndex = schedulePanel.getScheduleList().getItems().size() - 1;
+        if (lastIndex >= 0) {
+            schedulePanel.getScheduleList().getSelectionModel().select(lastIndex);
+            QueleaApp.get().getMainWindow().getMainPanel().getPreviewPanel().setDisplayable(schedulePanel.getScheduleList().getItems().get(lastIndex), lastIndex);
+        }
     }
 
     private void clearWebView() {

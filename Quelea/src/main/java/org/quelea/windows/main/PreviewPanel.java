@@ -63,8 +63,8 @@ public class PreviewPanel extends LivePreviewPanel {
                 + LabelGrabber.INSTANCE.getLabel("space.key") + ")"));
         liveButton.setOnAction(t -> {
             QueleaApp.get().getMainWindow().getMainPanel().getLivePanel().setDisplayable(getDisplayable(),
-                    ((ContainedPanel) getCurrentPane()).getCurrentIndex());
-            QueleaApp.get().getMainWindow().getMainPanel().getLivePanel().getCurrentPane().requestFocus();
+                    ((ContainedPanel) getCurrentPanel()).getCurrentIndex());
+            QueleaApp.get().getMainWindow().getMainPanel().getLivePanel().getCurrentPanel().requestFocus();
             ListView<Displayable> list = QueleaApp.get().getMainWindow().getMainPanel().getSchedulePanel()
                     .getScheduleList().getListView();
             if (list.getSelectionModel().getSelectedIndex() < list.getItems().size() - 1

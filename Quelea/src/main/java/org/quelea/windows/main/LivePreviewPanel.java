@@ -222,7 +222,7 @@ public abstract class LivePreviewPanel extends BorderPane {
      *
      * @return the container panel.
      */
-    public Node getCurrentPane() {
+    public Node getCurrentPanel() {
         return cardPanel.getCurrentPane();
     }
 
@@ -508,7 +508,7 @@ public abstract class LivePreviewPanel extends BorderPane {
      * @return the canvases.
      */
     public Set<DisplayCanvas> getCanvases() {
-        return ((AbstractPanel) getCurrentPane()).getCanvases();
+        return ((AbstractPanel) getCurrentPanel()).getCanvases();
     }
 
     /**

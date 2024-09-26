@@ -57,6 +57,8 @@ import netscape.javascript.JSObject;
 
 import org.quelea.windows.main.schedule.SchedulePanel;
 import javafx.scene.control.CheckBox;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 /**
  * The panel used to get bible verses.
@@ -145,6 +147,22 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
         addToSchedule.setDisable(true);
         chapterPanel.getChildren().add(buttonPanel);
         getChildren().addAll(chapterPanel, bottomPane);
+
+        // Set KeyCodeCombination for "Add to Schedule"
+        this.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN).match(event)) {
+                if (!addToSchedule.isDisable()) {
+                    addToSchedule.fire();
+                }
+            }
+        });
+
+        // Set KeyCodeCombination for "Go Live"
+        this.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN).match(event)) {
+                goLiveCheckBox.setSelected(!goLiveCheckBox.isSelected());
+            }
+        });
 
         addUpdateListeners();
         bibleSelector.valueProperty().addListener((ObservableValue<? extends Bible> ov, Bible t, Bible t1) -> {

@@ -183,7 +183,12 @@ public class MainPanel extends BorderPane {
      * @return the preview / live splitpane divider position.
      */
     public double getPrevLiveDivPos() {
-        return mainSplit.getDividerPositions()[1];
+        if (mainSplit.getDividerPositions().length > 1) {
+            return mainSplit.getDividerPositions()[1];
+        }
+        else {
+            return -1;// Return out-of-bounds value
+        }
     }
 
     /**

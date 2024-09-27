@@ -30,6 +30,7 @@ public class MainMenuBar extends MenuBar {
     private ScheduleMenu scheduleMenu;
     private DatabaseMenu databaseMenu;
     private ToolsMenu toolsMenu;
+    private ControlMenu controlMenu; // New Control Menu
     private HelpMenu helpMenu;
     
     public MainMenuBar() {
@@ -44,9 +45,11 @@ public class MainMenuBar extends MenuBar {
         
         toolsMenu = new ToolsMenu();
         getMenus().add(toolsMenu);
-        
+
+        controlMenu = new ControlMenu(); // Add Control Menu
+        getMenus().add(controlMenu);
+
         helpMenu = new HelpMenu();
         getMenus().add(helpMenu);
     }
-    
 }

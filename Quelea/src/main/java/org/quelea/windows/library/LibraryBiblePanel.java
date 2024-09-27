@@ -42,6 +42,7 @@ import org.quelea.data.bible.ChapterVerseParser;
 import org.quelea.data.displayable.BiblePassage;
 import org.quelea.services.languages.LabelGrabber;
 import org.quelea.services.utils.QueleaProperties;
+import org.quelea.windows.main.PreviewPanel;
 import org.quelea.windows.main.QueleaApp;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -141,7 +142,7 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
 
             // Trigger Go Live if the checkbox is selected
             if (goLiveCheckBox.isSelected()) {
-                Platform.runLater(() -> goLiveWithLastAddedItem(schedulePanel));
+                Platform.runLater(() -> schedulePanel.goLiveWithLastAddedItem(0));
             }
         });
         addToSchedule.setDisable(true);
@@ -228,19 +229,6 @@ public class LibraryBiblePanel extends VBox implements BibleChangeListener {
                 });
             }
         });
-    }
-
-    /**
-     * Set the last added item as live in the schedule.
-     *
-     * @param schedulePanel the schedule panel containing the schedule list.
-     */
-    private void goLiveWithLastAddedItem(SchedulePanel schedulePanel) {
-        int lastIndex = schedulePanel.getScheduleList().getItems().size() - 1;
-        if (lastIndex >= 0) {
-            schedulePanel.getScheduleList().getSelectionModel().select(lastIndex);
-            QueleaApp.get().getMainWindow().getMainPanel().getPreviewPanel().setDisplayable(schedulePanel.getScheduleList().getItems().get(lastIndex), lastIndex);
-        }
     }
 
     private void clearWebView() {

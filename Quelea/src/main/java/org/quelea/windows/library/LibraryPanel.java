@@ -122,6 +122,15 @@ public class LibraryPanel extends VBox {
     }
 
     /**
+     * Get the library bible search panel.
+     *
+     * @return the library bible search  panel.
+     */
+    public LibraryBibleSearchPanel getBibleSearchPanel() {
+        return bibleSearchPanel;
+    }
+
+    /**
      * Get the library image panel.
      *
      * @return the library image panel.

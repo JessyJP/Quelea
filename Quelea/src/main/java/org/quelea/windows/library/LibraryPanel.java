@@ -38,6 +38,7 @@ public class LibraryPanel extends VBox {
     private static final Logger LOGGER = LoggerUtils.getLogger();
     private final LibrarySongPanel songPanel;
     private final LibraryBiblePanel biblePanel;
+    private final LibraryBibleSearchPanel bibleSearchPanel;
     private final LibraryImagePanel imagePanel;
     private final LibraryVideoPanel videoPanel;
     private final LibraryTimerPanel timerPanel;
@@ -66,6 +67,14 @@ public class LibraryPanel extends VBox {
         bibleTab.setText(LabelGrabber.INSTANCE.getLabel("library.bible.heading"));
         bibleTab.setContent(biblePanel);
         tabPane.getTabs().add(bibleTab);
+
+        LOGGER.log(Level.INFO, "Creating library bible search panel");
+        bibleSearchPanel = new LibraryBibleSearchPanel();
+        Tab bibleSearchTab = new Tab();
+        bibleSearchTab.setClosable(false);
+        bibleSearchTab.setText(LabelGrabber.INSTANCE.getLabel("library.bible.heading")+" \uD83D\uDD0ESearch");
+        bibleSearchTab.setContent(bibleSearchPanel);
+        tabPane.getTabs().add(bibleSearchTab);
 
         LOGGER.log(Level.INFO, "Creating library image panel");
         imagePanel = new LibraryImagePanel();

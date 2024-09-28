@@ -42,10 +42,18 @@ public class ControlMenu extends Menu {
         bibleTextSearchItem = new MenuItem("Bible Text Search", new ImageView(new Image("file:icons/looking_glass.png", 20, 20, false, true))); // Looking glass icon
         bibleTextSearchItem.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN)); // Ctrl + F
         bibleTextSearchItem.setOnAction(event -> {
-            // Action to focus the search field in the Bible search panel
-            QueleaApp.get().getMainWindow().getMainPanel().getLibraryPanel().requestFocus();
-            QueleaApp.get().getMainWindow().getMainPanel().getLibraryPanel().getBibleSearchPanel().requestFocus();
-            QueleaApp.get().getMainWindow().getMainPanel().getLibraryPanel().getBibleSearchPanel().getSearchField().requestFocus();
+            // Switch to the Bible Search tab before requesting focus on the search field
+            var libraryPanel = QueleaApp.get().getMainWindow().getMainPanel().getLibraryPanel();
+            var tabPane = libraryPanel.getTabPane();
+
+            // Find and select the Bible Search tab
+            libraryPanel.getTabPane().getTabs().stream()
+                    .filter(tab -> tab.getContent() == libraryPanel.getBibleSearchPanel())
+                    .findFirst()
+                    .ifPresent(tabPane.getSelectionModel()::select);
+
+            // Now request focus on the search field inside the Bible Search Panel
+            libraryPanel.getBibleSearchPanel().getSearchField().requestFocus();
         });
         getItems().add(bibleTextSearchItem);
     }

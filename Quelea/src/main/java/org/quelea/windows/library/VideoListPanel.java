@@ -154,7 +154,7 @@ public class VideoListPanel extends BorderPane {
         final ImageView view = new ImageView();
         final Label fileLabel = new Label(trim17(file.getName()));
 
-//        view.setImage(resize(vidPreviewDisplay.getPreviewImg(file.toURI())));
+        view.setImage(resize(vidPreviewDisplay.getPreviewImg(file.toURI())));
 
         Platform.runLater(() -> {
             final VBox viewBox = new VBox();

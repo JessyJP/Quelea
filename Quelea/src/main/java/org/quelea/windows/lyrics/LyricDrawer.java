@@ -407,7 +407,7 @@ public class LyricDrawer extends WordDrawer {
             if(!Objects.equals(vidDisplay.getUri(), uri)) {
                 vidDisplay.stop();
                 vidDisplay.setURI(uri);
-//                vidDisplay.play();
+                vidDisplay.play();
             }
             newImageView.imageProperty().bind(vidDisplay.imageProperty());
 

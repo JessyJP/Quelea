@@ -56,7 +56,7 @@ public class LibraryPanel extends VBox {
         songPanel = new LibrarySongPanel();
         Tab songTab = new Tab();
         songTab.setClosable(false);
-        songTab.setText(LabelGrabber.INSTANCE.getLabel("library.songs.heading"));
+        songTab.setText("🎵 " + LabelGrabber.INSTANCE.getLabel("library.songs.heading"));
         songTab.setContent(songPanel);
         tabPane.getTabs().add(songTab);
 
@@ -64,7 +64,7 @@ public class LibraryPanel extends VBox {
         biblePanel = new LibraryBiblePanel();
         Tab bibleTab = new Tab();
         bibleTab.setClosable(false);
-        bibleTab.setText(LabelGrabber.INSTANCE.getLabel("library.bible.heading"));
+        bibleTab.setText("📖 " + LabelGrabber.INSTANCE.getLabel("library.bible.heading"));
         bibleTab.setContent(biblePanel);
         tabPane.getTabs().add(bibleTab);
 
@@ -72,7 +72,7 @@ public class LibraryPanel extends VBox {
         bibleSearchPanel = new LibraryBibleSearchPanel();
         Tab bibleSearchTab = new Tab();
         bibleSearchTab.setClosable(false);
-        bibleSearchTab.setText(LabelGrabber.INSTANCE.getLabel("library.bible.heading")+" \uD83D\uDD0ESearch");
+        bibleSearchTab.setText("🔎 " + "Search");
         bibleSearchTab.setContent(bibleSearchPanel);
         tabPane.getTabs().add(bibleSearchTab);
 
@@ -80,7 +80,7 @@ public class LibraryPanel extends VBox {
         imagePanel = new LibraryImagePanel();
         Tab imageTab = new Tab();
         imageTab.setClosable(false);
-        imageTab.setText(LabelGrabber.INSTANCE.getLabel("library.image.heading"));
+        imageTab.setText("🖼️ " + LabelGrabber.INSTANCE.getLabel("library.image.heading"));
         imageTab.setContent(imagePanel);
         tabPane.getTabs().add(imageTab);
 
@@ -89,7 +89,7 @@ public class LibraryPanel extends VBox {
             videoPanel = new LibraryVideoPanel();
             Tab videoTab = new Tab();
             videoTab.setClosable(false);
-            videoTab.setText(LabelGrabber.INSTANCE.getLabel("library.video.heading"));
+            videoTab.setText("🎥 " + LabelGrabber.INSTANCE.getLabel("library.video.heading"));
             videoTab.setContent(videoPanel);
             tabPane.getTabs().add(videoTab);
         }
@@ -101,7 +101,7 @@ public class LibraryPanel extends VBox {
         timerPanel = new LibraryTimerPanel();
         timerTab = new Tab();
         timerTab.setClosable(false);
-        timerTab.setText(LabelGrabber.INSTANCE.getLabel("library.timer.heading"));
+        timerTab.setText("⏲️ " + LabelGrabber.INSTANCE.getLabel("library.timer.heading"));
         timerTab.setContent(timerPanel);
         if (QueleaProperties.get().getTimerDir().listFiles() != null
                 && QueleaProperties.get().getTimerDir().listFiles().length > 0) {

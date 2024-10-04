@@ -44,6 +44,8 @@ import org.quelea.services.languages.LabelGrabber;
 import org.quelea.services.utils.LoggerUtils;
 import org.quelea.services.utils.QueleaProperties;
 import org.quelea.services.utils.Utils;
+import org.quelea.windows.main.LivePanel;
+import org.quelea.windows.main.PreviewPanel;
 import org.quelea.windows.main.QueleaApp;
 import org.quelea.windows.main.actionhandlers.RemoveScheduleItemActionHandler;
 
@@ -257,5 +259,23 @@ public class SchedulePanel extends BorderPane {
         return themePopup;
     }
 
-
+    /**
+     * Set the last added item as live in the schedule.
+     */
+    public void goLiveWithLastAddedItem(int index) {
+        int lastItemIndex = this.getScheduleList().getItems().size() - 1;
+        if (lastItemIndex >= 0) {
+//            previewPanel.setDisplayable(schedulePanel.getScheduleList().getItems().get(lastIndex), lastIndex);
+            this.getScheduleList().getSelectionModel().select(lastItemIndex);
+        }
+        if (index > 0) {
+            PreviewPanel previewPanel = QueleaApp.get().getMainWindow().getMainPanel().getPreviewPanel();
+            LivePanel livePanel = QueleaApp.get().getMainWindow().getMainPanel().getLivePanel();
+            if (previewPanel.isVisible) {
+                previewPanel.setDisplayable(previewPanel.getDisplayable(), index);
+            } else{
+                livePanel.setDisplayable(this.getScheduleList().getSelectionModel().getSelectedItem(), index);
+            }
+        }
+    }
 }

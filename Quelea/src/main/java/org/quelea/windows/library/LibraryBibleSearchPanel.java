@@ -86,7 +86,7 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
 
     //-------------------------
     private final int minSearchChar = 2;
-    public boolean postFilterBeginsWith = false;
+    public boolean postFilterBeginsWith = true;
 
     /**
      * Create and populate a new Library Bible Search Panel.
@@ -354,9 +354,22 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
                             chapter.getBook().getBible().getName().equals(bibleSelector.getSelectionModel().getSelectedItem().getName())) {
                         // Iterate over the verses in the chapter
                         for (BibleVerse verse : chapter.getVerses()) {
-                            // Check if all tokens (from the original search) are present in the verse text
-                            boolean allTokensMatch = Arrays.stream(tokens)
-                                    .allMatch(token -> verse.getVerseText().toLowerCase().contains(token.toLowerCase()));
+                            boolean allTokensMatch = false;
+                            if (!postFilterBeginsWith) {
+                                // Check if all tokens (from the original search) are present in the verse text
+                                allTokensMatch = Arrays.stream(tokens)
+                                        .allMatch(token -> verse.getVerseText().toLowerCase().contains(token.toLowerCase()));
+                            }
+                            else {
+                                // Split the verse text once into words
+                                String[] words = verse.getVerseText().toLowerCase().split("\\s+");
+
+                                // Check if all tokens match any word that starts with the token
+                                allTokensMatch = Arrays.stream(tokens)
+                                        .allMatch(token -> Arrays.stream(words)
+                                                .anyMatch(word -> word.startsWith(token.toLowerCase())));
+                            }
+
                             // If all tokens match, add the verse to the results
                             if (allTokensMatch) {
                                 matchingVerses.add(verse);  // Add matching verse

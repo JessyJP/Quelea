@@ -86,6 +86,7 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
 
     //-------------------------
     private final int minSearchChar = 2;
+    public boolean postFilterBeginsWith = false;
 
     /**
      * Create and populate a new Library Bible Search Panel.
@@ -101,7 +102,7 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
         searchField.setDisable(true); // Disable until BibleManager is initialized
 
         // Add a listener to trigger search dynamically as the user types
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(newValue));
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchCallback(newValue));
 
         // Initialize the Bible selector dropdown (ComboBox) and set its initial state
         bibleSelector = new ComboBox<>();
@@ -109,7 +110,7 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
 
         // Add a listener to re-trigger search when the selected Bible changes
         bibleSelector.valueProperty().addListener((observable, oldValue, newValue) -> {
-            performSearch(searchField.getText());
+            searchCallback(searchField.getText());
         });
 
         // Initialize the WebView and its engine for displaying passage previews
@@ -291,7 +292,45 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
      *
      * @param searchText the text to search for.
      */
-    private void performSearch(String searchText) {
+    private void searchCallback(String searchText) {
+        // Trim leading and trailing white space
+        final String searchTextFinal = searchText.trim();
+
+        Platform.runLater(() -> {
+            // Check if the longest token is longer than 3 characters
+            if (searchTextFinal.length() > minSearchChar) {
+
+                // Clear previous results
+                verses.clear();
+                verses.addAll( performSearch(searchTextFinal) );
+
+                // Auto-select the first verse from the search results if available
+                if (!verses.isEmpty()) {
+                    selectedVerse = verses.get(0);
+                }
+
+                // Update the matches label with the number of results found
+                setMatchesCount(verses.size());
+
+                // Render search results and update the button state based on selection
+                renderSearchResults(verses);
+                updateButtonState(); // Update button state after selection
+            } else {
+                // Reset the matches count and clear any displayed verses when the search is too short
+                resetPreviewToCleared();
+            }
+        });
+    }
+
+    /**
+     * Perform a search operation on the input text and return the matching verses.
+     *
+     * @param searchText the text to search for.
+     * @return a list of matching Bible verses.
+     */
+    private List<BibleVerse> performSearch(String searchText) {
+        List<BibleVerse> matchingVerses = new ArrayList<>();
+
         // Trim leading and trailing white space
         searchText = searchText.trim();
 
@@ -305,50 +344,30 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
 
         // Check if the longest token is longer than 3 characters
         if (longestToken.length() > minSearchChar) {
-            Platform.runLater(() -> {
-                // Clear previous results
-                verses.clear();
+            final BibleChapter[] initialResults = BibleManager.get().getIndex().filter(longestToken, null);
 
-                // Use BibleManager's filter method to search Bible chapters based on the longest token
-                final BibleChapter[] initialResults = BibleManager.get().getIndex().filter(longestToken, null);
-
-                // Reset and populate the search results
-                if (!longestToken.isEmpty()) {
-                    // Iterate over filtered chapters
-                    for (BibleChapter chapter : initialResults) {
-                        // Check if either all Bibles are selected or the current Bible matches the selection
-                        if (bibleSelector.getSelectionModel().getSelectedIndex() == 0 ||
-                                chapter.getBook().getBible().getName().equals(bibleSelector.getSelectionModel().getSelectedItem().getName())) {
-                            // Iterate over the verses in the chapter
-                            for (BibleVerse verse : chapter.getVerses()) {
-                                // Check if all tokens (from the original search) are present in the verse text
-                                boolean allTokensMatch = Arrays.stream(tokens)
-                                        .allMatch(token -> verse.getVerseText().toLowerCase().contains(token.toLowerCase()));
-                                // If all tokens match, add the verse to the results
-                                if (allTokensMatch) {
-                                    verses.add(verse);  // Add matching verse
-                                }
+            if (!longestToken.isEmpty()) {
+                // Iterate over filtered chapters
+                for (BibleChapter chapter : initialResults) {
+                    // Check if either all Bibles are selected or the current Bible matches the selection
+                    if (bibleSelector.getSelectionModel().getSelectedIndex() == 0 ||
+                            chapter.getBook().getBible().getName().equals(bibleSelector.getSelectionModel().getSelectedItem().getName())) {
+                        // Iterate over the verses in the chapter
+                        for (BibleVerse verse : chapter.getVerses()) {
+                            // Check if all tokens (from the original search) are present in the verse text
+                            boolean allTokensMatch = Arrays.stream(tokens)
+                                    .allMatch(token -> verse.getVerseText().toLowerCase().contains(token.toLowerCase()));
+                            // If all tokens match, add the verse to the results
+                            if (allTokensMatch) {
+                                matchingVerses.add(verse);  // Add matching verse
                             }
                         }
                     }
                 }
-
-                // Auto-select the first verse from the search results if available
-                if (!verses.isEmpty()) {
-                    selectedVerse = verses.get(0);
-                }
-
-                // Update the matches label with the number of results found
-                setMatchesCount(verses.size());
-
-                // Render search results and update the button state based on selection
-                renderSearchResults(verses);
-                updateButtonState(); // Update button state after selection
-            });
-        } else {
-            // Reset the matches count and clear any displayed verses when the search is too short
-            resetPreviewToCleared();
+            }
         }
+
+        return matchingVerses;
     }
 
     /**
@@ -405,7 +424,7 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
      *
      * @param results The list of Bible verses to render.
      */
-    private void renderSearchResults(List<BibleVerse> results) {
+    private String buildSearchResultsView(List<BibleVerse> results) {
         // Check the current theme setting
         boolean isDarkTheme = QueleaProperties.get().getUseDarkTheme();
 
@@ -469,7 +488,12 @@ public class LibraryBibleSearchPanel extends VBox implements BibleChangeListener
 
         htmlContent.append("</body></html>");
 
-        webEngine.loadContent(htmlContent.toString());
+        return htmlContent.toString();
+    }
+    
+    private void renderSearchResults(List<BibleVerse> results) {
+        String searchResultsWebView = buildSearchResultsView(results);
+        webEngine.loadContent(searchResultsWebView);
 
         // Set up JavaScript bridge for handling verse selections
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {

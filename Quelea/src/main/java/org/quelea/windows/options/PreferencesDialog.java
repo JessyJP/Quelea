@@ -68,6 +68,7 @@ public class PreferencesDialog extends Stage {
     private final OptionsRecordingPanel recordingPanel;
     private final OptionsMIDIPanel midiPanel;
     private final OptionsImportExportPanel importExportPanel;
+    private final OptionsShortcutsPanel shortcutsPanel;  // Added the shortcuts panel
     private HashMap<Field, ObservableValue> bindings = new HashMap<>();
     private boolean previousLinkPreviewLiveDividers;
 
@@ -93,6 +94,7 @@ public class PreferencesDialog extends Stage {
         recordingPanel = new OptionsRecordingPanel(bindings, hasVLC);
         midiPanel = new OptionsMIDIPanel(bindings);
         importExportPanel = new OptionsImportExportPanel(bindings);
+        shortcutsPanel = new OptionsShortcutsPanel(bindings);  // Initialize the shortcuts panel
 
         preferencesFx =
                 PreferencesFx.of(new PreferenceStorageHandler(parent),
@@ -105,7 +107,8 @@ public class PreferencesDialog extends Stage {
                         optionsServerSettingsPanel.getServerTab(),
                         recordingPanel.getRecordingsTab(),
                         midiPanel.getMidiTab(),
-                        importExportPanel.getImportExportTab()
+                        importExportPanel.getImportExportTab(),
+                        shortcutsPanel.getShortcutsTab()  // Add the shortcuts tab to preferences
                 );
 
         okButton = new Button(LabelGrabber.INSTANCE.getLabel("ok.button"), new ImageView(new Image("file:icons/tick.png")));

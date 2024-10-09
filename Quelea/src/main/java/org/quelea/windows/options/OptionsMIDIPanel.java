@@ -54,16 +54,6 @@ public class OptionsMIDIPanel {
     private SimpleIntegerProperty globalMidiChannelProperty;
     private HashMap<Field, ObservableValue> bindings;
 
-    // Create dynamic groups for MIDI control events
-    List<String> midiControlEvents = List.of(
-            midiAction_Clear, midiAction_Black, midiAction_Gotoitem, midiAction_Next, midiAction_Nextitem,
-            midiAction_Play, midiAction_Prev, midiAction_Previtem, midiAction_Section, midiAction_Tlogo,
-            midiAction_TransposeDown1, midiAction_TransposeDown2, midiAction_TransposeDown3, midiAction_TransposeDown4,
-            midiAction_TransposeDown5, midiAction_TransposeDown6, midiAction_TransposeUp0, midiAction_TransposeUp1,
-            midiAction_TransposeUp2, midiAction_TransposeUp3, midiAction_TransposeUp4, midiAction_TransposeUp5,
-            midiAction_TransposeUp6
-    );
-
     /**
      * Create the options MIDI panel.
      *
@@ -106,8 +96,8 @@ public class OptionsMIDIPanel {
         // Bind the ComboBox to the globalMidiChannelProperty
         channelDropdown.valueProperty().bindBidirectional(globalMidiChannelProperty.asObject());
 
-        // Generate groups for each MIDI control event
-        List<Group> midiControlGroups = midiControlEvents.stream()
+        // Dynamically generate MIDI control groups from the MIDI event list in MidiInterfaceConnector
+        List<Group> midiControlGroups = MIC.getMidiEventMap().values().stream()
                 .map(this::createMidiControlGroup)
                 .collect(Collectors.toList());
 
@@ -125,15 +115,13 @@ public class OptionsMIDIPanel {
         );
     }
 
-    private Group createMidiControlGroup(String midiAction) {
-        String actionValue = QueleaProperties.get().getProperty(midiAction, "true,NOTE_ON,16,0");
-        String[] parts = actionValue.split(",");
-        BooleanProperty actionEnabled = new SimpleBooleanProperty(Boolean.parseBoolean(parts[0]));
-        SimpleStringProperty midiType = new SimpleStringProperty(parts[1]);
-        SimpleIntegerProperty midiChannel = new SimpleIntegerProperty(Integer.parseInt(parts[2]));
-        SimpleIntegerProperty midiValue = new SimpleIntegerProperty(Integer.parseInt(parts[3]));
+    private Group createMidiControlGroup(MidiEvent midiEvent) {
+//        BooleanProperty actionEnabled = new SimpleBooleanProperty(midiEvent.isEnabled());
+//        SimpleIntegerProperty midiChannel = new SimpleIntegerProperty(midiEvent.getChannel() + 1); // Channels are 0-indexed
+        SimpleStringProperty midiType = new SimpleStringProperty(MidiUtils.midiTypeIntToStr(midiEvent.getType()));
+        SimpleIntegerProperty midiValue = new SimpleIntegerProperty(midiEvent.getNote());
 
-        return Group.of(LabelGrabber.INSTANCE.getLabel(midiAction),
+        return Group.of(LabelGrabber.INSTANCE.getLabel(midiEvent.Key),
 //                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.enable.label"), actionEnabled),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.type.label"), midiType),
 //                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.channel.label"), midiChannel, 1, 16),

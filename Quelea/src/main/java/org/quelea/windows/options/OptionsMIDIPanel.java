@@ -71,6 +71,7 @@ public class OptionsMIDIPanel {
      */
     OptionsMIDIPanel(HashMap<Field, ObservableValue> bindings) {
         this.bindings = bindings;
+        this.MIC = QueleaApp.get().getMidiInterfaceConnector();
         enableMidiProperty = new SimpleBooleanProperty(QueleaProperties.get().getUseMidiControl());
         globalMidiChannelProperty = new SimpleIntegerProperty(QueleaProperties.get().getGlobalMidiChannel());
 
@@ -95,23 +96,22 @@ public class OptionsMIDIPanel {
                 MidiUtils.getMidiOutputDeviceList().stream().map(MidiDevice.Info::getName).collect(Collectors.toList())
         );
         deviceDropdown.valueProperty().bindBidirectional(selectedInputDeviceProperty);
+
         // Create ComboBox for MIDI channels
         ObservableList<Integer> midiChannels = FXCollections.observableArrayList();
         for (int i = 1; i <= 16; i++) {
             midiChannels.add(i);
         }
-
         ComboBox<Integer> channelDropdown = new ComboBox<>(midiChannels);
+        // Bind the ComboBox to the globalMidiChannelProperty
         channelDropdown.valueProperty().bindBidirectional(globalMidiChannelProperty.asObject());
-
-
 
         // Generate groups for each MIDI control event
         List<Group> midiControlGroups = midiControlEvents.stream()
                 .map(this::createMidiControlGroup)
                 .collect(Collectors.toList());
 
-        // Combine all groups
+        // Combine all groups, add the MIDI options including the new dropdown for MIDI channels
         Group[] allGroups = new Group[midiControlGroups.size() + 1];
         allGroups[0] = Group.of(LabelGrabber.INSTANCE.getLabel("midi.options.group"),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.enable.label"), enableMidiProperty).customKey(midiEnabled),
@@ -134,9 +134,9 @@ public class OptionsMIDIPanel {
         SimpleIntegerProperty midiValue = new SimpleIntegerProperty(Integer.parseInt(parts[3]));
 
         return Group.of(LabelGrabber.INSTANCE.getLabel(midiAction),
-                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.enable.label"), actionEnabled),
+//                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.enable.label"), actionEnabled),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.type.label"), midiType),
-                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.channel.label"), midiChannel, 1, 16),
+//                Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.channel.label"), midiChannel, 1, 16),
                 Setting.of(LabelGrabber.INSTANCE.getLabel("midi.action.value.label"), midiValue, 0, 127)
         );
     }

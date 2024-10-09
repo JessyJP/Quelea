@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quelea.server;
+package org.quelea.server.midi;
 
 import javax.sound.midi.*;
 
@@ -25,134 +25,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jetbrains.annotations.NotNull;
+import org.quelea.server.RCHandler;
 import org.quelea.services.utils.LoggerUtils;
 import org.quelea.services.utils.QueleaProperties;
 
 
 import java.util.List;
-
-class MidiEvent {
-    // Constructor and properties
-    private static final Logger LOGGER = LoggerUtils.getLogger();
-    public boolean Enabled = true;
-    public int type     = ShortMessage.NOTE_ON;
-    public int channel  = 16-1;
-    public int note      ;// Data 1
-    public int velocity = 0 ;// Data 2
-    public String callbackName;
-    public String Key;
-
-    MidiEvent(String propertyString, String callbackName_in) {
-        this.stringPropertyToMidiEvent(propertyString);
-        this.callbackName = callbackName_in;
-        LOGGER.log(Level.INFO, "Add midi control event:["+this.propertiesToString()+"] for ["+propertyString+"] for ["+callbackName+"]");
-    }
-
-    // Get and Set properties
-    public String propertiesToString() {
-        return ""
-                + Enabled + ","
-                + type + ","
-                + (channel+1) + ","
-                + note ;
-    }
-
-    public void stringPropertyToMidiEvent(String propertyStrIn) {
-        propertyStrIn = propertyStrIn.replaceAll("\\s","");// Remove any white space
-        String[] properties = propertyStrIn.split(",");
-        this.Enabled     = Boolean.valueOf(properties[0]);
-        this.type        = StrToMidiTypeInd(properties[1]);
-        this.channel     = (Integer.parseInt(properties[2])-1);
-        this.note        = Integer.valueOf(properties[3]); // TODO: NOTE! This might actually not mean note but simply midi data at the corresponding array position
-    }
-
-    // Convert message type to string and integer
-    public int StrToMidiTypeInd(@NotNull String typeStr) {
-        switch(typeStr) {
-            case "ACTIVE_SENSING": 			return 0xFE; // (0xFE, or 254)
-            case "CHANNEL_PRESSURE": 		return 0xD0; // (0xD0, or 208)
-            case "CONTINUE": 				return 0xFB; // (0xFB, or 251)
-            case "CONTROL_CHANGE": 			return 0xB0; // (0xB0, or 176)
-            case "END_OF_EXCLUSIVE": 		return 0xF7; // (0xF7, or 247)
-            case "MIDI_TIME_CODE": 			return 0xF1; // (0xF1, or 241)
-            case "NOTE_OFF": 				return 0x80; // (0x80, or 128)
-            case "NOTE_ON": 				return 0x90; // (0x90, or 144)
-            case "PITCH_BEND": 				return 0xE0; // (0xE0, or 224)
-            case "POLY_PRESSURE": 			return 0xA0; // (0xA0, or 160)
-            case "PROGRAM_CHANGE": 			return 0xC0; // (0xC0, or 192)
-            case "SONG_POSITION_POINTER": 	return 0xF2; // (0xF2, or 242)
-            case "SONG_SELECT": 			return 0xF3; // (0xF3, or 243)
-            case "START": 					return 0xFA; // (0xFA, or 250)
-            case "STOP": 					return 0xFC; // (0xFC, or 252)
-            case "SYSTEM_RESET": 			return 0xFF; // (0xFF, or 255)
-            case "TIMING_CLOCK": 			return 0xF8; // (0xF8, or 248)
-            case "TUNE_REQUEST": 			return 0xF6; // (0xF6, or 246)
-            default:
-                throw new IllegalStateException("Unexpected value: " + typeStr);
-        }
-    }
-
-    public String StrToMidiTypeInd(int typeInt) {
-        switch (typeInt)
-        {
-            case 0xFE:  return  "ACTIVE_SENSING"; 			// (0xFE, or 254)
-            case 0xD0:  return  "CHANNEL_PRESSURE"; 		// (0xD0, or 208)
-            case 0xFB:  return  "CONTINUE"; 				// (0xFB, or 251)
-            case 0xB0:  return  "CONTROL_CHANGE"; 			// (0xB0, or 176)
-            case 0xF7:  return  "END_OF_EXCLUSIVE"; 		// (0xF7, or 247)
-            case 0xF1:  return  "MIDI_TIME_CODE"; 			// (0xF1, or 241)
-            case 0x80:  return  "NOTE_OFF"; 				// (0x80, or 128)
-            case 0x90:  return  "NOTE_ON"; 					// (0x90, or 144)
-            case 0xE0:  return  "PITCH_BEND"; 				// (0xE0, or 224)
-            case 0xA0:  return  "POLY_PRESSURE"; 			// (0xA0, or 160)
-            case 0xC0:  return  "PROGRAM_CHANGE"; 			// (0xC0, or 192)
-            case 0xF2:  return  "SONG_POSITION_POINTER"; 	// (0xF2, or 242)
-            case 0xF3:  return  "SONG_SELECT"; 				// (0xF3, or 243)
-            case 0xFA:  return  "START"; 					// (0xFA, or 250)
-            case 0xFC:  return  "STOP"; 					// (0xFC, or 252)
-            case 0xFF:  return  "SYSTEM_RESET"; 			// (0xFF, or 255)
-            case 0xF8:  return  "TIMING_CLOCK"; 			// (0xF8, or 248)
-            case 0xF6:  return  "TUNE_REQUEST"; 			// (0xF6, or 246)
-            default:
-                throw new IllegalStateException("Unexpected value: " + typeInt);
-        }
-
-    }
-
-    // Make a qucik find key
-    // --- For quick access
-    @Override
-    public String toString() {
-        ShortMessage tmpMsg = new ShortMessage();
-        try {
-            tmpMsg.setMessage(this.type,this.channel,this.note,this.velocity);
-        } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
-        return tmpMsg.toString();
-    };
-
-    public ShortMessage toMidiMessage() throws InvalidMidiDataException {
-        //ShortMessage msg = new ShortMessage();
-        //msg.setMessage(type,channel,note,velocity);
-        //return  msg;
-        return (new ShortMessage(type,channel,note,velocity));
-    }
-    public ShortMessage toMidiMessage(int velocity_) throws InvalidMidiDataException {
-        //ShortMessage msg = new ShortMessage();
-        //msg.setMessage(type,channel,note,velocity);
-        //return  msg;
-        return (new ShortMessage(type,channel,note,velocity_));
-    }
-    public boolean match(@NotNull MidiMessage m ) throws InvalidMidiDataException {
-        byte[] LB = this.toMidiMessage().getMessage();
-        byte[] b = m.getMessage();
-        if(b[0] == LB[0] && b[1] == LB[1])
-            return true;
-        else return false;
-    }
-}
 
 
 /**
@@ -176,19 +54,14 @@ public class MidiInterfaceConnector
     private MidiDevice QueleaMidiDev_OUT = null;
     private Receiver OutputExternalReceiver = null;
     // Midi event map
-    private Map<String,MidiEvent> midiEventMap = new HashMap<>();
+    private Map<String, MidiEvent> midiEventMap = new HashMap<>();
 
     /**
-     * Create a MIDI interface connection with a specified midi interface.
-     * <p>
-     *
-     * @param defaultMidiDeviceInterface
+     * Create a MIDI interface module.
      */
-    public MidiInterfaceConnector(String defaultMidiDeviceInterface) throws InvalidMidiDataException, MidiUnavailableException {
-        LOGGER.log(Level.INFO, "Setup midi connection with [{0}]",defaultMidiDeviceInterface);
+    public MidiInterfaceConnector() throws InvalidMidiDataException, MidiUnavailableException {
+        LOGGER.log(Level.INFO, "Setup midi module with MIDI event list.");
         createMidiEventList();
-        this.setupMidiInputConnection(defaultMidiDeviceInterface);
-        this.setupMidiOutputConnection(defaultMidiDeviceInterface);
     }
 
     // Midi Event list initialization
@@ -224,10 +97,15 @@ public class MidiInterfaceConnector
             midiEventMap.put(me.callbackName,me);
         }
     }
+    // Method to get the midiEventMap
+    public Map<String, MidiEvent> getMidiEventMap() {
+        return midiEventMap;  // Returning the original map
+    }
 
     // Device management methods
     public void setupMidiInputConnection(String InputDevice) throws MidiUnavailableException {
 
+        LOGGER.log(Level.INFO, "Setup midi connection with [{0}]",InputDevice);
         // Before anything we have to make sure device are closed
         closeInputDevice();
 
@@ -304,6 +182,7 @@ public class MidiInterfaceConnector
     }
     public void setupMidiOutputConnection(String OutputDevice) throws MidiUnavailableException {
 
+        LOGGER.log(Level.INFO, "Setup midi connection with [{0}]",OutputDevice);
         // Before anything we have to make sure device are closed
         closeOutputDevice();
 

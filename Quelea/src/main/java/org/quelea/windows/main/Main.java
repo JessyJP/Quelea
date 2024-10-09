@@ -30,7 +30,7 @@ import org.quelea.server.AutoDetectServer;
 import org.quelea.server.mDNS_Service;  // Import mDNS service
 import org.quelea.server.MobileLyricsServer;
 import org.quelea.server.RemoteControlServer;
-import org.quelea.server.MidiInterfaceConnector;
+import org.quelea.server.midi.MidiInterfaceConnector;
 import org.quelea.services.languages.LabelGrabber;
 import org.quelea.services.utils.FontInstaller;
 import org.quelea.services.utils.GStreamerInitState;
@@ -162,12 +162,14 @@ public final class Main extends Application {
 
                 // -MIDI CONTROL -----------------------------------------------
                 if (QueleaProperties.get().getUseMidiControl()) {
-                    LOGGER.log(Level.INFO, "Starting midi control interface with [{0}]", QueleaProperties.get().getMidiDeviceInterface());
+                    LOGGER.log(Level.INFO, "Starting midi control interface with [{0}]", QueleaProperties.get().getMidiInDeviceInterface());
                     try {
-                        MidiInterfaceConnector midiController = new MidiInterfaceConnector(QueleaProperties.get().getMidiDeviceInterface());
-                        //QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the panel
+                        MidiInterfaceConnector midiController = new MidiInterfaceConnector();
+                        QueleaApp.get().setMidiInterfaceConnector(midiController);// This one is for the panel
+                        midiController.setupMidiInputConnection(QueleaProperties.get().getMidiInDeviceInterface());
+//                        midiController.setupMidiOutputConnection(QueleaProperties.get().getMidiOutDeviceInterface());
                     } catch (Exception ex) {
-                        LOGGER.log(Level.INFO, "Couldn't create midi control interface", ex);
+                        LOGGER.log(Level.INFO, "Couldn't establish midi control connection!", ex);
                     }
                 } else {
                     LOGGER.log(Level.INFO, "Midi control disabled");

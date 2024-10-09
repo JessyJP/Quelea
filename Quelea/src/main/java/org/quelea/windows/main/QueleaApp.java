@@ -23,7 +23,7 @@ import java.util.List;
 import org.javafx.dialog.Dialog;
 import org.quelea.data.Schedule;
 import org.quelea.server.AutoDetectServer;
-import org.quelea.server.MidiInterfaceConnector;
+import org.quelea.server.midi.MidiInterfaceConnector;
 import org.quelea.server.MobileLyricsServer;
 import org.quelea.server.RemoteControlServer;
 import org.quelea.server.mDNS_Service;  // Add import for mDNS service

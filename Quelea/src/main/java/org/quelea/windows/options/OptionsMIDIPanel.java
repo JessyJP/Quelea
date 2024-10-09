@@ -27,11 +27,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.quelea.server.MidiUtils;
+import org.quelea.server.midi.MidiInterfaceConnector;
+import org.quelea.server.midi.MidiUtils;
 import org.quelea.services.languages.LabelGrabber;
 import org.quelea.services.utils.QueleaProperties;
+import org.quelea.windows.main.QueleaApp;
 
 import javax.sound.midi.MidiDevice;
+import org.quelea.server.midi.MidiEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +48,7 @@ import static org.quelea.services.utils.QueleaPropertyKeys.*;
  * @author Arvid
  */
 public class OptionsMIDIPanel {
+    private MidiInterfaceConnector MIC;
     private BooleanProperty enableMidiProperty;
     private SimpleStringProperty selectedInputDeviceProperty;
     private SimpleIntegerProperty globalMidiChannelProperty;

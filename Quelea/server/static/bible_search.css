@@ -1,0 +1,92 @@
+/* General styling for the body and the container */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.bible-search-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Bible selector row styling */
+.bible-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.bible-row label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.bible-row select {
+    padding: 5px;
+    width: 200px;
+    font-size: 16px;
+}
+
+/* Search field and matches row */
+.search-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-row label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#searchField {
+    padding: 5px;
+    font-size: 16px;
+    width: 200px;
+}
+
+#matchesLabel {
+    margin-left: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button row styling */
+.button-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.button-row button {
+    padding: 8px 12px;
+    margin-right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button-row input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Styling for the search results section */
+.search-results {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.search-results p {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

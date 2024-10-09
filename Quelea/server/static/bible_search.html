@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Search</title>
+    <link rel="stylesheet" href="static/bible_search.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+<div class="bible-search-container">
+    <!-- Bible Selector -->
+    <div class="bible-row">
+        <label for="bibleSelector">Select Bible:</label>
+        <select id="bibleSelector">
+            <option value="">Select a Bible</option>
+            <option value="Bible1">Bible 1</option>
+            <option value="Bible2">Bible 2</option>
+            <option value="Bible3">Bible 3</option>
+        </select>
+    </div>
+
+    <!-- Search and Matches Row -->
+    <div class="search-row">
+        <label for="searchField">Search:</label>
+        <input type="text" id="searchField" placeholder="Enter search text..." onkeyup="performSearch()">
+        <label id="matchesLabel">0 matches</label>
+    </div>
+
+    <!-- Buttons Row -->
+    <div class="button-row">
+        <button id="addChapterButton" onclick="addChapter()">Add Chapter</button>
+        <button id="addVersesButton" onclick="addVerses()">Add Verse</button>
+        <input type="checkbox" id="goLiveCheckbox">
+        <label for="goLiveCheckbox">Go Live</label>
+    </div>
+
+    <!-- Search Results Section -->
+    <div class="search-results" id="searchResults">
+        <!-- Results will be dynamically loaded here -->
+    </div>
+</div>
+
+<script src="static/bible_search.js"></script> <!-- Link to your JS file -->
+</body>
+</html>

@@ -26,10 +26,7 @@ import org.javafx.dialog.Dialog;
 import org.quelea.data.bible.BibleManager;
 import org.quelea.data.db.SongManager;
 import org.quelea.data.powerpoint.OOUtils;
-import org.quelea.server.AutoDetectServer;
-import org.quelea.server.mDNS_Service;  // Import mDNS service
-import org.quelea.server.MobileLyricsServer;
-import org.quelea.server.RemoteControlServer;
+import org.quelea.server.*;
 import org.quelea.server.midi.MidiInterfaceConnector;
 import org.quelea.services.languages.LabelGrabber;
 import org.quelea.services.utils.FontInstaller;
@@ -203,6 +200,10 @@ public final class Main extends Application {
                     }
                 }));
                 //------------------------------------------------------------
+
+                //////////////////////////////// =-------------------------
+                SimpleMDNSTest.main(new String[]{new String("")});
+                //////////////////////////////// =-------------------------
 
 
                 if (QueleaProperties.get().getWebProxyHost() != null && QueleaProperties.get().getWebProxyPort() != null && QueleaProperties.get().getWebProxyUser() != null && QueleaProperties.get().getWebProxyPassword() != null) {

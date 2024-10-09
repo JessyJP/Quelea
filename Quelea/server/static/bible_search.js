@@ -1,8 +1,12 @@
-function showBibleSearchOverlay() {
-    var bibleSearchFrame = document.getElementById("bibleSearchFrame");
-    bibleSearchFrame.src = "static/bible_search.html";  // This will load the Bible search page
-    bibleSearchFrame.style.display = "block";
+function toggleBibleSearchOverlay() {
+    var overlay = document.getElementById("bibleSearchOverlay");
+    if (overlay.style.display === "block") {
+        overlay.style.display = "none"; // Hide the overlay
+    } else {
+        overlay.style.display = "block"; // Show the overlay
+    }
 }
+
 
 function performSearch() {
     // Dummy search function (replace with actual logic)

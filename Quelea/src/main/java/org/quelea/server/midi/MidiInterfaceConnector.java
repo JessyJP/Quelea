@@ -352,7 +352,7 @@ public class MidiInterfaceConnector
                 else if (midiEventMap.get("prev"           ).match(message)) { RCHandler.prev(); }
                 else if (midiEventMap.get("prevItem"       ).match(message)) { RCHandler.prevItem(); }
                 else if (midiEventMap.get("section"        ).match(message)) { RCHandler.setLyrics("section"+velocity); }
-                else if (midiEventMap.get("logo"		   	  ).match(message)) { RCHandler.logo(); }
+                else if (midiEventMap.get("logo"		   ).match(message)) { RCHandler.logo(); }
                 else if (midiEventMap.get("transposeDown1" ).match(message)) { RCHandler.transposeSong(1); }
                 else if (midiEventMap.get("transposeDown2" ).match(message)) { RCHandler.transposeSong(2); }
                 else if (midiEventMap.get("transposeDown3" ).match(message)) { RCHandler.transposeSong(3); }

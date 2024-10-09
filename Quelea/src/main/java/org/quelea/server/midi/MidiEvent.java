@@ -24,6 +24,7 @@ public class MidiEvent {
     MidiEvent(String propertyString, String callbackName_in) {
         this.stringPropertyToMidiEvent(propertyString);
         this.callbackName = callbackName_in;
+        this.Key = "midi.Action."+callbackName_in.toLowerCase();
         LOGGER.log(Level.INFO, "Add midi control event:[" + this.propertiesToString() + "] for [" + propertyString + "] for [" + callbackName + "]");
     }
 
